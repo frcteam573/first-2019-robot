@@ -11,6 +11,9 @@
 
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include "frc\Joystick.h"
+#include <WPILib.h>
+#include "frc\Talon.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -21,6 +24,10 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+  frc::Joystick controller1{ 0 };  // Xbox controller 1
+  frc::Talon Leftdrive { 1 };
+
+
 
  private:
   frc::SendableChooser<std::string> m_chooser;
