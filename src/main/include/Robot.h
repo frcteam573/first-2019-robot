@@ -14,6 +14,9 @@
 #include "frc\Joystick.h"
 #include <WPILib.h>
 #include "frc\Talon.h"
+#include <ADXRS450_Gyro.h>
+#include "Drive.h"
+#include "Encoder.h"
 
 class Robot : public frc::TimedRobot {
  public:
@@ -24,14 +27,18 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
-  frc::Joystick controller1{ 0 };  // Xbox controller 1
-  frc::Talon Leftdrive { 1 };
+  
+  Drive* MyDrive;
+  
 
 
 
  private:
+  frc::Joystick controller1{ 0 };  // Xbox controller 1
+  frc::Joystick controller2{ 1 }; // Xbox controller 2
   frc::SendableChooser<std::string> m_chooser;
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
+  
 };

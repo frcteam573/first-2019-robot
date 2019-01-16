@@ -12,6 +12,7 @@
 #include <iostream>
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "Drive.h"
 
 
 
@@ -67,15 +68,11 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {
 
-  
   double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
-  bool AButton = controller1.GetRawButton(1); //Get A button Value (True or False)
-
+  MyDrive->Joystick_drive(leftin,rightin);
   
-  Leftdrive.Set(leftin);
-  auto leftinstr = std::to_string(leftin);
-	frc::SmartDashboard::PutString("DB/String 0",leftinstr);
+  
 }
 
 
