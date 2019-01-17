@@ -7,14 +7,12 @@
 
 #include "Robot.h"
 #include "frc\Joystick.h"
-#include <WPILib.h>
+#include "frc\WPILib.h"
 #include "frc\Talon.h"
 #include <iostream>
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "Drive.h"
-
-
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -57,24 +55,28 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-  if (m_autoSelected == kAutoNameCustom) {
+ if (m_autoSelected == kAutoNameCustom) {
     // Custom Auto goes here
   } else {
-    // Default Auto goes here
+    MyDrive.Joystick_drive(0,0);
   }
+   
 }
 
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+  
+}
 
 void Robot::TeleopPeriodic() {
 
+  // Read in controller input values
   double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
-  MyDrive->Joystick_drive(leftin,rightin);
   
+  // Drive Code Section
+  MyDrive.Joystick_drive(leftin,rightin);
   
 }
-
 
 void Robot::TestPeriodic() {}
 

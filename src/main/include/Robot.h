@@ -8,15 +8,12 @@
 #pragma once
 
 #include <string>
-
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc\Joystick.h"
-#include <WPILib.h>
-#include "frc\Talon.h"
-#include <ADXRS450_Gyro.h>
+#include <frc\WPILib.h>
 #include "Drive.h"
-#include "Encoder.h"
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -28,10 +25,8 @@ class Robot : public frc::TimedRobot {
   void TeleopPeriodic() override;
   void TestPeriodic() override;
   
-  Drive* MyDrive;
-  
-
-
+  // Subsystem Definition
+  Drive MyDrive;
 
  private:
   frc::Joystick controller1{ 0 };  // Xbox controller 1
