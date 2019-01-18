@@ -27,8 +27,10 @@ class Drive : public frc::Subsystem {
  private:
 frc::VictorSP * Leftdrive;
 frc::VictorSP * Rightdrive;
+double Threshold(double in,double thres);
 
-  //frc::Talon Rightclimb { 4 };
+  frc::VictorSP * Leftclimb;
+  frc::VictorSP * Rightclimb;
   //frc::Talon Leftclimb { 5 };
   //frc::Encoder Leftdrive_encoder { 2, 3, false, Encoder::k4X};
   //frc::Encoder Rightdrive_encoder { 0, 1, false, Encoder::k4X};
@@ -39,5 +41,9 @@ frc::VictorSP * Rightdrive;
   void InitDefaultCommand() override;
 // User Wrtitten Functions
   void Joystick_drive(double LeftStick,double RightStick);
+
+  void Camera_Centering(double Leftstick, float camera_x);
+  
+  void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 };
 #endif 

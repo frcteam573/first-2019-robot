@@ -12,6 +12,7 @@
 #include <frc/smartdashboard/SendableChooser.h>
 #include "frc\Joystick.h"
 #include <frc\WPILib.h>
+#include "networktables/NetworkTable.h"
 #include "Drive.h"
 
 

@@ -10,6 +10,7 @@
 #include "frc\WPILib.h"
 #include "frc\Talon.h"
 #include <iostream>
+#include "NetworkTables/NetworkTable.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "Drive.h"
@@ -72,10 +73,38 @@ void Robot::TeleopPeriodic() {
   // Read in controller input values
   double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
+  bool button_b = controller1.GetRawButton(2); 
+  bool button_lb = controller1.GetRawButton(5);
+  bool button_rb = controller1.GetRawButton(6);
+  bool button_start = controller1.GetRawButton(8);
+  bool button_back = controller1.GetRawButton(7);
+  // Read in camera Stuff
   
+  std::shared_ptr<NetworkTable> table = nt::NetworkTable::GetTable("limelight");
+  
+  table->PutNumber("ledMode", 0);
+  table->PutNumber("camMode", 0);
+  table->PutNumber("pipeline", 1); //Vision Target pipeline
+
+  float camera_x = table->GetNumber("tx", 0);
+  float camera_exist = table->GetNumber("tv", 0);
+  float image_size = table->GetNumber("ta", 0);
+ auto leftinstr = std::to_string(camera_x);
+ // auto rightinstr = std::to_string(RightStick);
+
+// Push string values to Dashboard
+  frc::SmartDashboard::PutString("DB/String 2",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
   // Drive Code Section
-  MyDrive.Joystick_drive(leftin,rightin);
-  
+  if (button_b){
+    MyDrive.Camera_Centering(leftin, camera_x);
+  }
+  else {
+    MyDrive.Joystick_drive(leftin,rightin);
+  }
+
+  //Climber code section
+  MyDrive.Climb_Extend(button_lb, button_rb, button_start, button_back);
 }
 
 void Robot::TestPeriodic() {}
