@@ -14,6 +14,8 @@
 #include <frc\WPILib.h>
 #include "networktables/NetworkTable.h"
 #include "Drive.h"
+#include "Appendage.h"
+#include "Log.h"
 
 
 class Robot : public frc::TimedRobot {
@@ -28,6 +30,8 @@ class Robot : public frc::TimedRobot {
   
   // Subsystem Definition
   Drive MyDrive;
+  Appendage MyAppendage;
+  Log MyLog;
 
  private:
   frc::Joystick controller1{ 0 };  // Xbox controller 1

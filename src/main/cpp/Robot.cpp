@@ -14,6 +14,8 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include "Drive.h"
+#include "Appendage.h"
+#include "Log.h"
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
