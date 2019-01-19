@@ -21,6 +21,9 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  MyLog.Create();
+  MyAppendage.spatuclawRetract();
+
 }
 
 /**
@@ -75,11 +78,14 @@ void Robot::TeleopPeriodic() {
   // Read in controller input values
   double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
-  bool button_b = controller1.GetRawButton(2); 
+  bool button_b = controller1.GetRawButton(2);
+  bool button_a = controller1.GetRawButton(1); 
   bool button_lb = controller1.GetRawButton(5);
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
   bool button_back = controller1.GetRawButton(7);
+  bool button_lb2 = controller2.GetRawButton(5);
+  bool button_rb2 = controller2.GetRawButton(6);
   // Read in camera Stuff
   
   std::shared_ptr<NetworkTable> table = nt::NetworkTable::GetTable("limelight");
@@ -91,7 +97,7 @@ void Robot::TeleopPeriodic() {
   float camera_x = table->GetNumber("tx", 0);
   float camera_exist = table->GetNumber("tv", 0);
   float image_size = table->GetNumber("ta", 0);
- auto leftinstr = std::to_string(camera_x);
+  auto leftinstr = std::to_string(camera_x);
  // auto rightinstr = std::to_string(RightStick);
 
 // Push string values to Dashboard
@@ -101,12 +107,30 @@ void Robot::TeleopPeriodic() {
   if (button_b){
     MyDrive.Camera_Centering(leftin, camera_x);
   }
+  else if (button_a){
+    MyDrive.Camera_Centering_Distance(camera_x, image_size);
+  }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
   }
 
   //Climber code section
   MyDrive.Climb_Extend(button_lb, button_rb, button_start, button_back);
+
+  //Logging section
+  MyLog.PDP(15, 0, true);
+
+  // Appendage code
+  if (button_lb2){
+    MyAppendage.spatuclawExtend();
+  }
+  else if (button_rb2){
+    MyAppendage.spatuclawRetract();
+  }
+  
+  
+
+
 }
 
 void Robot::TestPeriodic() {}

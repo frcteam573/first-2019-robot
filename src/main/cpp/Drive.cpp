@@ -10,6 +10,7 @@
 #include "frc\VictorSP.h"
 #include "Drive.h"
 
+
 using namespace std;
 
 Drive::Drive() : Subsystem("Drive") {
@@ -19,6 +20,7 @@ Rightdrive = new frc::VictorSP(1);
 Leftclimb = new frc::VictorSP(4);
 Rightclimb = new frc::VictorSP(5);
 Leftclimb->SetInverted(true);
+
 
 }
 
@@ -78,12 +80,28 @@ double Drive::Threshold(double in,double thres){
 void Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
-  double kp_c = .1;
+  double kp_c = .025;
   double output = kp_c * error;
   Leftstick = Threshold(Leftstick,0.75);
 
   Leftdrive->Set(Leftstick+output);
   Rightdrive->Set(Leftstick-output);
+}
+
+void Drive::Camera_Centering_Distance( float camera_x, float camera_size){
+
+  double error = 0 - camera_x;
+  double kp_c = .025;
+  double output = kp_c * error;
+  
+
+  double error_size = camera_size-18;
+  double k_image = .035;
+  double output_image = k_image * error_size;
+  output_image = Threshold(output_image,0.95);
+
+  Leftdrive->Set(output_image+output);
+  Rightdrive->Set(output_image-output);
 }
 
 //Climber code

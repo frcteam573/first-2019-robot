@@ -16,6 +16,13 @@
 #include <frc/commands/Subsystem.h>
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
+#include <fstream>
+#include <ctime>
+#include <time.h>
+#include <chrono>
+#include <iostream>
+#include <sstream>
+#include <frc/PowerDistributionPanel.h>
 using namespace std;
 
 class Log : public frc::Subsystem {
@@ -25,7 +32,14 @@ class Log : public frc::Subsystem {
 
  public:
   Log();
-  void InitDefaultCommand() override;
+	string dateAndTime();
+	void Create();
+	void PDP(int slot, double limit, bool override);
+	void Write(string text);
+	void PDPTotal();
+	void Close();
+	void DrivetrainCurrentCompare(int slot,double PWMin);
+	void ProgrammingTabInfoLog();
 // User Wrtitten Functions Definitions here.
 
 };

@@ -8,12 +8,25 @@
 #include "frc\Joystick.h"
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
+#include "frc\DoubleSolenoid.h"
 #include "Appendage.h"
 
 using namespace std;
 
 Appendage::Appendage() : Subsystem("Appendage") {
 //Leftdrive = new frc::VictorSP(0);
+//spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
+}
+
+void Appendage::spatuclawExtend() {
+
+//  spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+
+}
+
+void Appendage::spatuclawRetract() {
+
+  //spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 
 }
 
