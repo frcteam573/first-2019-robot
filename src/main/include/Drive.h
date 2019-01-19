@@ -17,6 +17,7 @@
 #include "frc\Joystick.h"
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
+
 using namespace std;
 
 class Drive : public frc::Subsystem {
@@ -28,6 +29,7 @@ double Threshold(double in,double thres);
 
   frc::VictorSP * Leftclimb;
   frc::VictorSP * Rightclimb;
+
   //frc::Talon Leftclimb { 5 };
   //frc::Encoder Leftdrive_encoder { 2, 3, false, Encoder::k4X};
   //frc::Encoder Rightdrive_encoder { 0, 1, false, Encoder::k4X};
@@ -41,6 +43,8 @@ double Threshold(double in,double thres);
 
   void Camera_Centering(double Leftstick, float camera_x);
   
+  void Camera_Centering_Distance( float camera_x, float camera_size);
+
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 };
 #endif 

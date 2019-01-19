@@ -17,6 +17,7 @@
 #include "frc\Joystick.h"
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
+#include "frc\DoubleSolenoid.h"
 
 using namespace std;
 
@@ -24,11 +25,14 @@ class Appendage : public frc::Subsystem {
 
  private:
  //Declare Motor and sensors used in appendage functions here.
-//frc::VictorSP * Leftdrive;
+ // frc::DoubleSolenoid * spatuclawSolenoid;
+  //frc::VictorSP * Rightclimb;
 
  public:
   Appendage();
   void InitDefaultCommand() override;
+  void spatuclawRetract();
+  void spatuclawExtend();
 // User Wrtitten Functions Definitions here.
  
 };
