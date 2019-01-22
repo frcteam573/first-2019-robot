@@ -10,9 +10,11 @@
 #include <string>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include "frc/smartdashboard/Smartdashboard.h"
 #include "frc\Joystick.h"
 #include <frc\WPILib.h>
 #include "networktables/NetworkTable.h"
+#include "NetworkTables/NetworkTableInstance.h"
 #include "Drive.h"
 #include "Appendage.h"
 #include "Log.h"

@@ -43,7 +43,7 @@ double Threshold(double in,double thres);
 
   void Camera_Centering(double Leftstick, float camera_x);
   
-  void Camera_Centering_Distance( float camera_x, float camera_size);
+  void Camera_Centering_Distance(float camera_x, float camera_size);
 
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 };
