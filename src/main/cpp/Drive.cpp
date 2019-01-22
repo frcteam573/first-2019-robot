@@ -49,21 +49,6 @@ Rightdrive->Set(RightStick);
 
 
 }
-/*
-float Drive::Read_in_camera_VT() { // vision target 
-
-  std::shared_ptr<NetworkTable> table = NetworkTable::GetTable("limelight");
-  table->PutNumber("ledMode", 0);
-  table->PutNumber("camMode", 0);
-  table->PutNumber("pipeline", 1); //Vision Target pipeline
-
-  float camera_x = table->GetNumber("tx", 0);
-  float camera_exist = table->GetNumber("tv", 0);
-  float image_size = table->GetNumber("ta", 0);
-
-  return camera_x;
-}*/
-
 
 double Drive::Threshold(double in,double thres){
 
@@ -80,7 +65,7 @@ double Drive::Threshold(double in,double thres){
 void Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
-  double kp_c = .025;
+  double kp_c = .05;
   double output = kp_c * error;
   Leftstick = Threshold(Leftstick,0.75);
 

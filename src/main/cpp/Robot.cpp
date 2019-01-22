@@ -10,9 +10,9 @@
 #include "frc\WPILib.h"
 #include "frc\Talon.h"
 #include <iostream>
-#include "NetworkTables/NetworkTable.h"
-
 #include <frc/smartdashboard/SmartDashboard.h>
+#include "NetworkTables/NetworkTable.h"
+#include "NetworkTables/NetworkTableInstance.h"
 #include "Drive.h"
 #include "Appendage.h"
 #include "Log.h"
@@ -23,6 +23,9 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   MyLog.Create();
   MyAppendage.spatuclawRetract();
+  MyAppendage.spatuclawClose();
+  MyAppendage.punchyIn();
+  
 
 }
 
@@ -86,9 +89,14 @@ void Robot::TeleopPeriodic() {
   bool button_back = controller1.GetRawButton(7);
   bool button_lb2 = controller2.GetRawButton(5);
   bool button_rb2 = controller2.GetRawButton(6);
+  bool button_start2 = controller2.GetRawButton(8);
+  bool button_back2 = controller2.GetRawButton(7);
+  double right_trigger2 = controller2.GetRawAxis(3);
+  double d_pad2 = controller2.GetPOV(0);
+  double leftin2 = controller2.GetRawAxis(1);
   // Read in camera Stuff
   
-  std::shared_ptr<NetworkTable> table = nt::NetworkTable::GetTable("limelight");
+  std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
   
   table->PutNumber("ledMode", 0);
   table->PutNumber("camMode", 0);
@@ -128,9 +136,31 @@ void Robot::TeleopPeriodic() {
     MyAppendage.spatuclawRetract();
   }
   
+  if (button_start2){
+    MyAppendage.spatuclawOpen();
+  }
+  else if (button_back2){
+    MyAppendage.spatuclawClose();
+  }
   
+  if (right_trigger2 > 0.5){
+    MyAppendage.punchyOut();
+  }
+  else {
+    MyAppendage.punchyIn();
+  }
 
+  if (d_pad2 > 45 and d_pad2 < 135){
+    MyAppendage.spatuclawIn();
+  }
+  else if (d_pad2 > 225 and d_pad2 < 315){
+    MyAppendage.spatuclawOut();
+  }
+  else {
+    MyAppendage.spatuclawStop();
+  }
 
+  MyAppendage.elevator_joystick(leftin2);
 }
 
 void Robot::TestPeriodic() {}

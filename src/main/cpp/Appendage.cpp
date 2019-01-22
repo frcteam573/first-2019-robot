@@ -15,22 +15,72 @@ using namespace std;
 
 Appendage::Appendage() : Subsystem("Appendage") {
 //Leftdrive = new frc::VictorSP(0);
-//spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
+spatuclawSolenoid = new frc::DoubleSolenoid(1, 5, 6);
+spatuclawOpenClose = new frc::DoubleSolenoid(1, 0, 1);
+punchySolenoid = new frc::DoubleSolenoid(1, 2, 3);
+LeftClaw = new frc::VictorSP(8);
+LeftClaw->SetInverted(true);
+RightClaw = new frc::VictorSP(9);
+elevator = new frc::VictorSP(6);
 }
 
 void Appendage::spatuclawExtend() {
 
-//  spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+  spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 
 }
 
 void Appendage::spatuclawRetract() {
 
-  //spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+  spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 
 }
 
-void Appendage::InitDefaultCommand() {
-  // Set the default command for a subsystem here.
-  // SetDefaultCommand(new MySpecialCommand());
+void Appendage::spatuclawOpen() {
+  spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kForward);
+}
+
+void Appendage::spatuclawClose() {
+  spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
+void Appendage::punchyOut() {
+  punchySolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+}
+
+void Appendage::punchyIn() {
+  punchySolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
+void Appendage::spatuclawIn() {
+  LeftClaw->Set(0.8);
+  RightClaw->Set(0.8);
+}
+
+void Appendage::spatuclawOut() {
+  LeftClaw->Set(-0.8);
+  RightClaw->Set(-0.8);
+}
+
+void Appendage::spatuclawStop() {
+  LeftClaw->Set(0);
+  RightClaw->Set(0);
+}
+
+double Appendage::Threshold(double in,double thres){
+
+  double out = in;
+  if (in>thres){
+    out = thres;
+  }
+  if(in<-1*thres){
+    out = -1*thres;
+  }
+  return out;
+}
+
+void Appendage::elevator_joystick( double LeftStick) {
+  LeftStick = LeftStick * LeftStick * LeftStick;
+  LeftStick = Threshold(LeftStick, 0.9);
+  elevator->Set(LeftStick);
 }
