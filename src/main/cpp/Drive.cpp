@@ -20,6 +20,8 @@ Rightdrive = new frc::VictorSP(1);
 Leftclimb = new frc::VictorSP(4);
 Rightclimb = new frc::VictorSP(5);
 Leftclimb->SetInverted(true);
+Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
+Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 
 
 }
@@ -65,7 +67,7 @@ double Drive::Threshold(double in,double thres){
 void Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
-  double kp_c = .05;
+  double kp_c = .025;
   double output = kp_c * error;
   Leftstick = Threshold(Leftstick,0.75);
 
@@ -106,4 +108,33 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool
     Rightclimb->Set(0);
   }
 
+
+}
+
+
+void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed) {
+  double encoder_val_left = Left_encoder->Get();
+  double encoder_val_right = Right_encoder->Get();
+  double encoder_speed_left = Left_encoder->GetRate();
+  double encoder_speed_right = Right_encoder->GetRate();
+
+  double error_left_pos = setpoint_left_pos - encoder_val_left;
+  double error_right_pos = setpoint_right_pos - encoder_val_right;
+  double error_left_speed = setpoint_left_speed - encoder_speed_left;
+  double error_right_speed = setpoint_right_speed - encoder_speed_right;
+
+  
+  double kp_speed = .025;
+  double kp_pos = .025;
+
+  double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
+  double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
+
+  Leftdrive->Set(output_left);
+  Rightdrive->Set(output_right);
+
+  auto Left_encoderstr = std::to_string(Left_encoder);
+  frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);
+  auto Right_encoderstr = std::to_string(Right_encoder);
+  frc::SmartDashboard::PutString("DB/String 7",Right_encoderstr);
 }

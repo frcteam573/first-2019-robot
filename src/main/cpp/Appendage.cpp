@@ -10,6 +10,7 @@
 #include "frc\VictorSP.h"
 #include "frc\DoubleSolenoid.h"
 #include "Appendage.h"
+#include "frc\Encoder.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ LeftClaw = new frc::VictorSP(8);
 LeftClaw->SetInverted(true);
 RightClaw = new frc::VictorSP(9);
 elevator = new frc::VictorSP(6);
+elevator_encoder = new frc::Encoder( 6, 7, false, frc::Encoder::k4X);
 }
 
 void Appendage::spatuclawExtend() {
@@ -79,8 +81,32 @@ double Appendage::Threshold(double in,double thres){
   return out;
 }
 
+double Appendage::Deadband(double in, double thres){
+  double out = in;
+  if (in<thres and in>-1*thres){
+    out = 0;
+  }
+  
+  return out;
+}
+
 void Appendage::elevator_joystick( double LeftStick) {
   LeftStick = LeftStick * LeftStick * LeftStick;
   LeftStick = Threshold(LeftStick, 0.9);
   elevator->Set(LeftStick);
+  double encoder_val = elevator_encoder->Get();
+  auto encoder_valstr = std::to_string(encoder_val);
+  frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
+}
+
+void Appendage::elevator_PID(double setpoint) {
+  double encoder_val = elevator_encoder->Get();
+  double error = setpoint - encoder_val;
+  error = Deadband(error, 100);
+  double kpe = .025;
+  double output_e = error * kpe;
+  output_e = Threshold(output_e, 0.9);
+  elevator->Set(output_e);
+  auto encoder_valstr = std::to_string(encoder_val);
+  frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
 }

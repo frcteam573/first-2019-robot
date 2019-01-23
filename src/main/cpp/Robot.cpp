@@ -16,6 +16,9 @@
 #include "Drive.h"
 #include "Appendage.h"
 #include "Log.h"
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -64,11 +67,56 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
- if (m_autoSelected == kAutoNameCustom) {
-    // Custom Auto goes here
-  } else {
-    MyDrive.Joystick_drive(0,0);
+ // Read in controller input values
+  double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
+  double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
+  bool button_b = controller1.GetRawButton(2);
+  bool button_a = controller1.GetRawButton(1); 
+  bool button_lb = controller1.GetRawButton(5);
+  bool button_rb = controller1.GetRawButton(6);
+  bool button_start = controller1.GetRawButton(8);
+  bool button_back = controller1.GetRawButton(7);
+  bool button_lb2 = controller2.GetRawButton(5);
+  bool button_rb2 = controller2.GetRawButton(6);
+  bool button_start2 = controller2.GetRawButton(8);
+  bool button_back2 = controller2.GetRawButton(7);
+  double right_trigger2 = controller2.GetRawAxis(3);
+  double d_pad2 = controller2.GetPOV(0);
+  double leftin2 = controller2.GetRawAxis(1);
+  bool button_a2 = controller2.GetRawButton(1);
+  bool button_b2 = controller2.GetRawButton(2);
+  bool button_y2 = controller2.GetRawButton(4);
+  double left_trigger2 = controller2.GetRawAxis(2);
+  // Read in camera Stuff
+  
+  std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
+  
+  table->PutNumber("ledMode", 0);
+  table->PutNumber("camMode", 0);
+  table->PutNumber("pipeline", 1); //Vision Target pipeline
+
+  float camera_x = table->GetNumber("tx", 0);
+  float camera_exist = table->GetNumber("tv", 0);
+  float image_size = table->GetNumber("ta", 0);
+  auto leftinstr = std::to_string(camera_x);
+ // auto rightinstr = std::to_string(RightStick);
+
+// Push string values to Dashboard
+  frc::SmartDashboard::PutString("DB/String 2",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
+  // Drive Code Section
+  if (button_b){
+    MyDrive.Camera_Centering(leftin, camera_x);
   }
+  else if (button_a){
+    //getline(filename, )
+    //MyDrive.drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed) ;
+
+  }
+  else {
+    MyDrive.Joystick_drive(leftin,rightin);
+  }
+  
    
 }
 
@@ -94,6 +142,10 @@ void Robot::TeleopPeriodic() {
   double right_trigger2 = controller2.GetRawAxis(3);
   double d_pad2 = controller2.GetPOV(0);
   double leftin2 = controller2.GetRawAxis(1);
+  bool button_a2 = controller2.GetRawButton(1);
+  bool button_b2 = controller2.GetRawButton(2);
+  bool button_y2 = controller2.GetRawButton(4);
+  double left_trigger2 = controller2.GetRawAxis(2);
   // Read in camera Stuff
   
   std::shared_ptr<NetworkTable> table = nt::NetworkTableInstance::GetDefault().GetTable("limelight");
@@ -160,7 +212,35 @@ void Robot::TeleopPeriodic() {
     MyAppendage.spatuclawStop();
   }
 
-  MyAppendage.elevator_joystick(leftin2);
+    
+  if (button_a2) {
+    if (left_trigger2 > 0.5){
+      MyAppendage.elevator_PID(250);
+    }
+    else {
+      MyAppendage.elevator_PID(1);
+    }
+  }
+  else if (button_b2) {
+    if (left_trigger2 > 0.5){
+      MyAppendage.elevator_PID(750);
+    }
+    else {
+      MyAppendage.elevator_PID(500);
+    }
+  }
+  else if (button_y2) {
+    if (left_trigger2 > 0.5){
+      MyAppendage.elevator_PID(1250);
+    }
+    else {
+      MyAppendage.elevator_PID(1000);
+    }
+  }
+  else {
+    MyAppendage.elevator_joystick(leftin2);
+  }
+  
 }
 
 void Robot::TestPeriodic() {}

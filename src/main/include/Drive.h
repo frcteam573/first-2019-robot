@@ -46,5 +46,7 @@ double Threshold(double in,double thres);
   void Camera_Centering_Distance(float camera_x, float camera_size);
 
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
+
+  void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed);
 };
 #endif 

@@ -18,6 +18,7 @@
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
 #include "frc\DoubleSolenoid.h"
+#include "frc\Encoder.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ class Appendage : public frc::Subsystem {
  frc::VictorSP * LeftClaw;
  frc::VictorSP * RightClaw;
  frc::VictorSP * elevator;
+ frc::Encoder * elevator_encoder;
   //frc::VictorSP * Rightclimb;
 
  public:
@@ -46,6 +48,8 @@ class Appendage : public frc::Subsystem {
   void spatuclawStop();
   void elevator_joystick(double LeftStick);
   double Threshold(double in,double thres);
+  void elevator_PID(double setpoint);
+  double Deadband(double in, double thres);
 // User Wrtitten Functions Definitions here.
  
 };
