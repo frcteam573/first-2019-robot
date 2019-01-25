@@ -17,6 +17,7 @@
 #include "frc\Joystick.h"
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
+#include "frc\Encoder.h"
 
 using namespace std;
 
@@ -29,11 +30,10 @@ double Threshold(double in,double thres);
 
   frc::VictorSP * Leftclimb;
   frc::VictorSP * Rightclimb;
+  frc::Encoder * Right_encoder;
+  frc::Encoder * Left_encoder;
 
-  //frc::Talon Leftclimb { 5 };
-  //frc::Encoder Leftdrive_encoder { 2, 3, false, Encoder::k4X};
-  //frc::Encoder Rightdrive_encoder { 0, 1, false, Encoder::k4X};
-//frc::ADXRS450_Gyro MyGyro{};
+  
 
  public:
   Drive();

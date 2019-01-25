@@ -9,6 +9,7 @@
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
 #include "Drive.h"
+#include "frc\Encoder.h"
 
 
 using namespace std;
@@ -124,17 +125,24 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   double error_right_speed = setpoint_right_speed - encoder_speed_right;
 
   
-  double kp_speed = .025;
-  double kp_pos = .025;
+  double kp_speed = -.005;
+  double kp_pos = -.025;
 
-  double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
-  double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
+  double output_left = (error_left_pos * kp_pos);
+  double output_right = (error_right_pos * kp_pos);
+
+  //double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
+  //double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
 
   Leftdrive->Set(output_left);
   Rightdrive->Set(output_right);
 
-  auto Left_encoderstr = std::to_string(Left_encoder);
+  auto Left_encoderstr = std::to_string(encoder_val_left);
   frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);
-  auto Right_encoderstr = std::to_string(Right_encoder);
+  auto Right_encoderstr = std::to_string(error_left_pos);
   frc::SmartDashboard::PutString("DB/String 7",Right_encoderstr);
+  Right_encoderstr = std::to_string(setpoint_left_pos);
+  frc::SmartDashboard::PutString("DB/String 8",Right_encoderstr);
+  Right_encoderstr = std::to_string(setpoint_left_speed);
+  frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
 }

@@ -18,6 +18,7 @@
 #include "Drive.h"
 #include "Appendage.h"
 #include "Log.h"
+#include "Auto.h"
 
 
 class Robot : public frc::TimedRobot {
@@ -34,6 +35,7 @@ class Robot : public frc::TimedRobot {
   Drive MyDrive;
   Appendage MyAppendage;
   Log MyLog;
+  Auto MyAuto;
 
  private:
   frc::Joystick controller1{ 0 };  // Xbox controller 1
@@ -42,5 +44,6 @@ class Robot : public frc::TimedRobot {
   const std::string kAutoNameDefault = "Default";
   const std::string kAutoNameCustom = "My Auto";
   std::string m_autoSelected;
+  int count;
   
 };

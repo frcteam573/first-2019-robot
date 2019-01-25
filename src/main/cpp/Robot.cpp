@@ -19,6 +19,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "Auto.h"
 
 void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
@@ -55,6 +56,7 @@ void Robot::RobotPeriodic() {}
  */
 void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
+  int count = 0;
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -108,10 +110,18 @@ void Robot::AutonomousPeriodic() {
   if (button_b){
     MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a){
-    //getline(filename, )
-    //MyDrive.drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed) ;
+  else if (button_a and count < 120){
+    
+    //Get setpoint values from tables
+    
+    double left_pos = MyAuto.ReturnTableVal(count,0);
+    double left_speed = MyAuto.ReturnTableVal(count,1);
 
+    left_pos = left_pos*120;
+    left_speed = left_speed*120;
+    //Call PID Loop to follow path
+    MyDrive.drive_PID(left_pos, 0, left_speed, 0) ;
+    count ++;
   }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
