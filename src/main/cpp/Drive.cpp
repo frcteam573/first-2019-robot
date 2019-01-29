@@ -10,6 +10,7 @@
 #include "frc\VictorSP.h"
 #include "Drive.h"
 #include "frc\Encoder.h"
+#include "frc\AnalogInput.h"
 
 
 using namespace std;
@@ -23,7 +24,7 @@ Rightclimb = new frc::VictorSP(5);
 Leftclimb->SetInverted(true);
 Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
-
+FrontDistance = new frc::AnalogInput(2);
 
 }
 
@@ -50,7 +51,9 @@ Rightdrive->Set(RightStick);
   frc::SmartDashboard::PutString("DB/String 0",leftinstr);
   frc::SmartDashboard::PutString("DB/String 1",rightinstr);
 
-
+double AnalogIn = FrontDistance->GetVoltage();
+auto Analoginstr = std::to_string(AnalogIn);
+frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
 }
 
 double Drive::Threshold(double in,double thres){

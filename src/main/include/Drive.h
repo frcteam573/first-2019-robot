@@ -18,6 +18,7 @@
 #include "frc\WPILib.h"
 #include "frc\VictorSP.h"
 #include "frc\Encoder.h"
+#include "frc\AnalogInput.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ double Threshold(double in,double thres);
   frc::Encoder * Right_encoder;
   frc::Encoder * Left_encoder;
 
-  
+frc::AnalogInput * FrontDistance;
 
  public:
   Drive();
