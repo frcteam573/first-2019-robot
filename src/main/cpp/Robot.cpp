@@ -29,6 +29,7 @@ void Robot::RobotInit() {
   MyAppendage.spatuclawRetract();
   MyAppendage.spatuclawClose();
   MyAppendage.punchyIn();
+  MyDrive.OrangeLeds();
   
 
 }
@@ -167,9 +168,14 @@ void Robot::TeleopPeriodic() {
   float camera_x = table->GetNumber("tx", 0);
   float camera_exist = table->GetNumber("tv", 0);
   float image_size = table->GetNumber("ta", 0);
-  auto leftinstr = std::to_string(camera_x);
- // auto rightinstr = std::to_string(RightStick);
-
+  auto leftinstr = std::to_string(image_size);
+  //auto rightinstr = std::to_string(RightStick);
+if (camera_exist==1){
+  MyDrive.WhiteLeds();
+}
+else {
+  MyDrive.OffLeds();
+}
 // Push string values to Dashboard
   frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);

@@ -19,7 +19,7 @@
 #include "frc\VictorSP.h"
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
-
+#include "frc\AnalogOutput.h"
 using namespace std;
 
 class Drive : public frc::Subsystem {
@@ -27,6 +27,7 @@ class Drive : public frc::Subsystem {
  private:
 frc::VictorSP * Leftdrive;
 frc::VictorSP * Rightdrive;
+frc::AnalogOutput * Leds;
 double Threshold(double in,double thres);
 
   frc::VictorSP * Leftclimb;
@@ -49,5 +50,12 @@ frc::AnalogInput * FrontDistance;
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed);
+
+  void OrangeLeds();
+  void PartyLeds();
+  void WhiteLeds();
+  void BlueLeds();
+  void YellowLeds();
+  void OffLeds();
 };
 #endif 

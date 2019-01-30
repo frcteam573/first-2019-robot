@@ -11,7 +11,7 @@
 #include "Drive.h"
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
-
+#include "frc\AnalogOutput.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ Leftclimb->SetInverted(true);
 Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 FrontDistance = new frc::AnalogInput(2);
-
+Leds = new frc::AnalogOutput(0);
 }
 
 void Drive::InitDefaultCommand() {
@@ -54,6 +54,7 @@ Rightdrive->Set(RightStick);
 double AnalogIn = FrontDistance->GetVoltage();
 auto Analoginstr = std::to_string(AnalogIn);
 frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
+OrangeLeds();
 }
 
 double Drive::Threshold(double in,double thres){
@@ -85,10 +86,24 @@ void Drive::Camera_Centering_Distance( float camera_x, float camera_size){
   double kp_c = .025;
   double output = kp_c * error;
   
+  double image_size_max = 3;
+  double error_size = camera_size-(image_size_max+2);
+  
 
-  double error_size = camera_size-18;
-  double k_image = .035;
-  double output_image = k_image * error_size;
+  double AnalogIn = FrontDistance->GetVoltage();
+  auto Analoginstr = std::to_string(AnalogIn);
+  frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
+  double output_image;
+  if (camera_size > image_size_max){
+    error_size = AnalogIn - 0.67;
+    double k_image = -.35;
+    output_image = k_image * error_size;
+  }
+  else {
+    double k_image = .09;
+    output_image = k_image * error_size;
+    
+  }
   output_image = Threshold(output_image,0.95);
 
   Leftdrive->Set(output_image+output);
@@ -148,4 +163,28 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   frc::SmartDashboard::PutString("DB/String 8",Right_encoderstr);
   Right_encoderstr = std::to_string(setpoint_left_speed);
   frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
+}
+void Drive::OrangeLeds() {
+
+  Leds->SetVoltage(0.55);
+}
+void Drive::PartyLeds() {
+
+  Leds->SetVoltage(1.1);
+}
+void Drive::WhiteLeds() {
+
+  Leds->SetVoltage(1.65);
+}
+void Drive::BlueLeds() {
+
+  Leds->SetVoltage(2.2);
+}
+void Drive::YellowLeds() {
+
+  Leds->SetVoltage(2.75);
+}
+void Drive::OffLeds() {
+
+  Leds->SetVoltage(3.3);
 }
