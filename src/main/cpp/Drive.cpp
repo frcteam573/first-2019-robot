@@ -198,3 +198,13 @@ void Drive::OffLeds() {
 
   Leds->SetVoltage(3.3);
 }
+
+void Drive::Dashboard(){
+
+  double encoder_val_left = Left_encoder->Get();
+  double encoder_val_right = Right_encoder->Get();
+
+  auto Left_encoderstr = std::to_string(encoder_val_left);
+  frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);
+
+}

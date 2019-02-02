@@ -263,6 +263,8 @@ else {
   MyDrive.OffLeds();
 }
 
+//Dashboard code
+  MyDrive.Dashboard();
 
 }
 

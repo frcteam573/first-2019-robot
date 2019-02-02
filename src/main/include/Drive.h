@@ -57,5 +57,7 @@ frc::AnalogInput * FrontDistance;
   void BlueLeds();
   void YellowLeds();
   void OffLeds();
+
+  void Dashboard();
 };
 #endif 
