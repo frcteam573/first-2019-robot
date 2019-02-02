@@ -170,12 +170,7 @@ void Robot::TeleopPeriodic() {
   float image_size = table->GetNumber("ta", 0);
   auto leftinstr = std::to_string(image_size);
   //auto rightinstr = std::to_string(RightStick);
-if (camera_exist==1){
-  MyDrive.WhiteLeds();
-}
-else {
-  MyDrive.OffLeds();
-}
+  bool distance_tf = false;
 // Push string values to Dashboard
   frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
@@ -184,7 +179,7 @@ else {
     MyDrive.Camera_Centering(leftin, camera_x);
   }
   else if (button_a){
-    MyDrive.Camera_Centering_Distance(camera_x, image_size);
+    distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
   }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
@@ -256,7 +251,19 @@ else {
   else {
     MyAppendage.elevator_joystick(leftin2);
   }
-  
+//LED section
+if (camera_exist==1){
+  MyDrive.WhiteLeds();
+}
+else if (distance_tf == 1) {
+  MyDrive.BlueLeds();
+}
+
+else {
+  MyDrive.OffLeds();
+}
+
+
 }
 
 void Robot::TestPeriodic() {}

@@ -54,7 +54,7 @@ Rightdrive->Set(RightStick);
 double AnalogIn = FrontDistance->GetVoltage();
 auto Analoginstr = std::to_string(AnalogIn);
 frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
-OrangeLeds();
+
 }
 
 double Drive::Threshold(double in,double thres){
@@ -80,7 +80,7 @@ void Drive::Camera_Centering(double Leftstick, float camera_x){
   Rightdrive->Set(Leftstick-output);
 }
 
-void Drive::Camera_Centering_Distance( float camera_x, float camera_size){
+bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 
   double error = 0 - camera_x;
   double kp_c = .025;
@@ -108,6 +108,14 @@ void Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 
   Leftdrive->Set(output_image+output);
   Rightdrive->Set(output_image-output);
+  bool distance_tf = false;
+  if (AnalogIn < 0.7){
+    distance_tf = true;
+  }
+  else {
+    distance_tf = false;
+  }
+  return distance_tf;
 }
 
 //Climber code
@@ -129,6 +137,8 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool
 
 
 }
+
+//void Drive::
 
 
 void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed) {
