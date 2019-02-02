@@ -12,9 +12,14 @@
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
 #include "frc\AnalogOutput.h"
+#include "frc\ADXRS450_Gyro.h"
+#include "frc\SPI.h"
+#include "frc\Compressor.h"
 
 using namespace std;
 
+double leftdriveold;
+double rightdriveold;
 Drive::Drive() : Subsystem("Drive") {
 Leftdrive = new frc::VictorSP(0);
 Leftdrive->SetInverted(true);
@@ -26,6 +31,8 @@ Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
+Gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
+Compressor = new frc::Compressor(1);
 }
 
 void Drive::InitDefaultCommand() {
@@ -40,9 +47,31 @@ void Drive::Joystick_drive(double LeftStick,double RightStick) {
 LeftStick = LeftStick * LeftStick * LeftStick;
 RightStick = RightStick * RightStick * RightStick;
 
+if (LeftStick > (leftdriveold + 0.3)){
+  LeftStick = leftdriveold + 0.3;
+}
+else if (LeftStick < (leftdriveold - 0.3)){
+  LeftStick = leftdriveold - 0.3;
+}
+
+if (RightStick > (rightdriveold + 0.3)){
+  RightStick = rightdriveold + 0.3;
+}
+else if (RightStick < (rightdriveold - 0.3)){
+  RightStick = rightdriveold - 0.3;
+}
+
 Leftdrive->Set(LeftStick);
 Rightdrive->Set(RightStick);
+leftdriveold = LeftStick;
+rightdriveold = RightStick;
 
+if (abs(LeftStick) > 0.8 and abs(RightStick) > 0.8){
+  Compressor->Stop();
+}
+else {
+  Compressor->Start();
+}
 // Convert double to strings
   auto leftinstr = std::to_string(LeftStick);
   auto rightinstr = std::to_string(RightStick);
@@ -69,7 +98,7 @@ double Drive::Threshold(double in,double thres){
   return out;
 }
 
-void Drive::Camera_Centering(double Leftstick, float camera_x){
+bool Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
   double kp_c = .025;
@@ -78,6 +107,17 @@ void Drive::Camera_Centering(double Leftstick, float camera_x){
 
   Leftdrive->Set(Leftstick+output);
   Rightdrive->Set(Leftstick-output);
+  
+
+  double AnalogIn = FrontDistance->GetVoltage();
+  bool distance_tf = false;
+  if (AnalogIn < 0.7){
+    distance_tf = true;
+  }
+  else {
+    distance_tf = false;
+  }
+  return distance_tf;
 }
 
 bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
@@ -94,7 +134,7 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
   auto Analoginstr = std::to_string(AnalogIn);
   frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
   double output_image;
-  if (camera_size > image_size_max){
+  if (camera_size > image_size_max or camera_size == 0){
     error_size = AnalogIn - 0.67;
     double k_image = -.35;
     output_image = k_image * error_size;
@@ -125,6 +165,7 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool
 
     Leftclimb->Set(1);
     Rightclimb->Set(1);
+    Compressor->Stop();
   }
   else if (button_start && button_back){
     Leftclimb->Set(-.5);
@@ -133,6 +174,7 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool
   else{
     Leftclimb->Set(0);
     Rightclimb->Set(0);
+    Compressor->Start();
   }
 
 
@@ -174,6 +216,28 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   Right_encoderstr = std::to_string(setpoint_left_speed);
   frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
 }
+
+
+bool Drive::platform_adjust(){
+  double AnalogIn = FrontDistance->GetVoltage();
+  double error = 1.26 - AnalogIn;
+  double kp_c = .7;
+  double output = kp_c * error;
+  
+  output = Threshold(output,0.95);
+
+  Leftdrive->Set(output);
+  Rightdrive->Set(output);
+  bool distance_tf = false;
+  if (AnalogIn < 1.35 and AnalogIn > 1.15){
+    distance_tf = true;
+  }
+  else {
+    distance_tf = false;
+  }
+  return distance_tf;
+}
+
 void Drive::OrangeLeds() {
 
   Leds->SetVoltage(0.55);
@@ -205,6 +269,27 @@ void Drive::Dashboard(){
   double encoder_val_right = Right_encoder->Get();
 
   auto Left_encoderstr = std::to_string(encoder_val_left);
-  frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);
+  frc::SmartDashboard::PutString("Left Encoder",Left_encoderstr);
+
+  auto Right_encoderstr = std::to_string(encoder_val_right);
+  frc::SmartDashboard::PutString("Right Encoder",Right_encoderstr);
+
+
+  double gyro_val = Gyro->GetAngle();
+  auto gyro_valstr = std::to_string(gyro_val);
+  frc::SmartDashboard::PutString("Gyro",gyro_valstr);
+
+  double AnalogIn = FrontDistance->GetVoltage();
+  if (AnalogIn < 0.7){
+    frc::SmartDashboard::PutBoolean("In Range", true);
+  }
+  else {
+    frc::SmartDashboard::PutBoolean("In Range", false);
+  }
+  auto FrontDistancestr = std::to_string(AnalogIn);
+  frc::SmartDashboard::PutString("Laser Range Finder",FrontDistancestr);
+
+  
 
 }
+

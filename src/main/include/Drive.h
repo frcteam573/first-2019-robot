@@ -20,6 +20,8 @@
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
 #include "frc\AnalogOutput.h"
+#include "frc\ADXRS450_Gyro.h"
+#include "frc\Compressor.h"
 using namespace std;
 
 class Drive : public frc::Subsystem {
@@ -28,6 +30,8 @@ class Drive : public frc::Subsystem {
 frc::VictorSP * Leftdrive;
 frc::VictorSP * Rightdrive;
 frc::AnalogOutput * Leds;
+frc::ADXRS450_Gyro * Gyro;
+frc::Compressor * Compressor;
 double Threshold(double in,double thres);
 
   frc::VictorSP * Leftclimb;
@@ -43,13 +47,15 @@ frc::AnalogInput * FrontDistance;
 // User Wrtitten Functions Definitions here.
   void Joystick_drive(double LeftStick,double RightStick);
 
-  void Camera_Centering(double Leftstick, float camera_x);
+  bool Camera_Centering(double Leftstick, float camera_x);
   
   bool Camera_Centering_Distance(float camera_x, float camera_size);
 
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed);
+
+  bool platform_adjust();
 
   void OrangeLeds();
   void PartyLeds();

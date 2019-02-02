@@ -50,6 +50,7 @@ class Appendage : public frc::Subsystem {
   double Threshold(double in,double thres);
   void elevator_PID(double setpoint);
   double Deadband(double in, double thres);
+  void Dashboard();
 // User Wrtitten Functions Definitions here.
  
 };

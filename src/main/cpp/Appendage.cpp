@@ -110,3 +110,12 @@ void Appendage::elevator_PID(double setpoint) {
   auto encoder_valstr = std::to_string(encoder_val);
   frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
 }
+
+void Appendage::Dashboard(){
+
+  double elevator_encoder_val = elevator_encoder->Get();
+
+  auto elevator_encoderstr = std::to_string(elevator_encoder_val);
+  frc::SmartDashboard::PutString("Elevator Encoder",elevator_encoderstr);
+ 
+}

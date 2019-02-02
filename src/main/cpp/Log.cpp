@@ -107,7 +107,7 @@ void Log::PDPTotal(){
 		light = false;
 	}
 
-	frc::SmartDashboard::PutBoolean("!! OVER 400 AMPS !!", light);
+	frc::SmartDashboard::PutBoolean("Over 400 amps", light);
 	auto Gyrooutstr = std::to_string(counter);
 	frc::SmartDashboard::PutString("DB/String 5",Gyrooutstr);
 }
@@ -120,45 +120,59 @@ void Log::DrivetrainCurrentCompare(int slot,double PWMin){
 		if (abs(current) < 1){
 			string output = "!----PDP Slot" + to_string(slot) + "is not getting enough current when driven";
 			Write(output);
-			frc::SmartDashboard::PutString("Slot Not Getting Current",to_string(slot));
+			frc::SmartDashboard::PutString("PDP not driven:",to_string(slot));
 		}
 	}
 }
 
-void Log::ProgrammingTabInfoLog(){
+void Log::Dashboard(){
 
 	double val;
 
 	val = board.GetCurrent(0);
-	frc::SmartDashboard::PutString("Left Cim 1", to_string(val));
+	frc::SmartDashboard::PutString("Right Drive Front", to_string(val));
 
 	val = board.GetCurrent(1);
-	frc::SmartDashboard::PutString("Left Cim 2", to_string(val));
+	frc::SmartDashboard::PutString("Right Drive Back", to_string(val));
 
 	// val = board.GetCurrent(2);
 	//frc::SmartDashboard::PutString("Left Cim 3", to_string(val));
 
 	 val = board.GetCurrent(13);
-	frc::SmartDashboard::PutString("Right Cim 1", to_string(val));
+	frc::SmartDashboard::PutString("Elevator 1", to_string(val));
 
 	 val = board.GetCurrent(14);
-	frc::SmartDashboard::PutString("Right Cim 2", to_string(val));
+	frc::SmartDashboard::PutString("Left Drive Front", to_string(val));
+
+	val = board.GetCurrent(15);
+	frc::SmartDashboard::PutString("Left Drive Back", to_string(val));
 
 	//val = board.GetCurrent(15);
 	//frc::SmartDashboard::PutString("Right Cim 3", to_string(val));
 	//frc::SmartDashboard::PutString("DB/String 4",to_string(board.GetCurrent(15)));
 
 	val = board.GetCurrent(3);
-	frc::SmartDashboard::PutString("Elevator 1", to_string(val));
+	frc::SmartDashboard::PutString("Left Climber", to_string(val));
+
+	val = board.GetCurrent(2);
+	frc::SmartDashboard::PutString("Right Climber", to_string(val));
+
 
 	 val = board.GetCurrent(12);
 	frc::SmartDashboard::PutString("Elevator 2", to_string(val));
 
-	 val = board.GetCurrent(10);
-	frc::SmartDashboard::PutString("Claw 1", to_string(val));
+	 val = board.GetCurrent(13);
+	frc::SmartDashboard::PutString("Elevator 1", to_string(val));
 
 	 val = board.GetCurrent(11);
-	frc::SmartDashboard::PutString("Claw 2", to_string(val));
+	frc::SmartDashboard::PutString("Spatuclaw Left", to_string(val));
+
+	val = board.GetCurrent(4);
+	frc::SmartDashboard::PutString("Spatuclaw Right", to_string(val));
+
+	PDPTotal();
+
+	
 
 }
 void Log::Close() {
@@ -166,3 +180,4 @@ void Log::Close() {
 	outText.close();
 
 }
+

@@ -39,7 +39,7 @@ class Log : public frc::Subsystem {
 	void PDPTotal();
 	void Close();
 	void DrivetrainCurrentCompare(int slot,double PWMin);
-	void ProgrammingTabInfoLog();
+	void Dashboard();
 // User Wrtitten Functions Definitions here.
 
 };

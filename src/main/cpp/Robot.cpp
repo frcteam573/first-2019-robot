@@ -142,6 +142,7 @@ void Robot::TeleopPeriodic() {
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
   bool button_b = controller1.GetRawButton(2);
   bool button_a = controller1.GetRawButton(1); 
+  bool button_y = controller1.GetRawButton(4);
   bool button_lb = controller1.GetRawButton(5);
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
@@ -171,18 +172,28 @@ void Robot::TeleopPeriodic() {
   auto leftinstr = std::to_string(image_size);
   //auto rightinstr = std::to_string(RightStick);
   bool distance_tf = false;
+  bool distance_platform = false;
+  bool distance_tf_b = false;
 // Push string values to Dashboard
   frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
   // Drive Code Section
   if (button_b){
-    MyDrive.Camera_Centering(leftin, camera_x);
+    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
   else if (button_a){
     distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
   }
+  else if (button_y){
+    distance_platform = MyDrive.platform_adjust();
+  }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
+
+  MyLog.DrivetrainCurrentCompare(0, rightin);
+	MyLog.DrivetrainCurrentCompare(1, rightin);
+	MyLog.DrivetrainCurrentCompare(14, leftin);
+	MyLog.DrivetrainCurrentCompare(15, leftin);
   }
 
   //Climber code section
@@ -252,20 +263,39 @@ void Robot::TeleopPeriodic() {
     MyAppendage.elevator_joystick(leftin2);
   }
 //LED section
-if (camera_exist==1){
-  MyDrive.WhiteLeds();
-}
-else if (distance_tf == 1) {
+if (distance_tf or distance_tf_b){
   MyDrive.BlueLeds();
+  
+}
+else if (camera_exist==1) {
+  MyDrive.WhiteLeds();
+  
+}
+else if (distance_platform){
+  MyDrive.YellowLeds();
+}
+else if (button_lb and button_rb){
+  MyDrive.PartyLeds();
 }
 
 else {
   MyDrive.OffLeds();
+  
 }
 
 //Dashboard code
   MyDrive.Dashboard();
-
+  MyAppendage.Dashboard();
+  MyLog.Dashboard();
+  frc::SmartDashboard::PutString("Camera TV", to_string(camera_exist));
+  if (camera_exist == 1){
+    frc::SmartDashboard::PutBoolean("Target Secured", true);
+  }
+  else {
+    frc::SmartDashboard::PutBoolean("Target Secured", false);
+  }
+  frc::SmartDashboard::PutString("Camera TX", to_string(camera_x));
+  frc::SmartDashboard::PutString("Camera TA", to_string(image_size));
 }
 
 void Robot::TestPeriodic() {}
