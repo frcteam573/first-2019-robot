@@ -21,9 +21,9 @@ using namespace std;
 double leftdriveold;
 double rightdriveold;
 Drive::Drive() : Subsystem("Drive") {
-Leftdrive = new frc::VictorSP(0);
+Leftdrive = new frc::VictorSP(1);
 Leftdrive->SetInverted(true);
-Rightdrive = new frc::VictorSP(1);
+Rightdrive = new frc::VictorSP(0);
 Leftclimb = new frc::VictorSP(4);
 Rightclimb = new frc::VictorSP(5);
 Leftclimb->SetInverted(true);

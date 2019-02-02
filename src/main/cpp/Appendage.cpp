@@ -16,9 +16,9 @@ using namespace std;
 
 Appendage::Appendage() : Subsystem("Appendage") {
 //Leftdrive = new frc::VictorSP(0);
-spatuclawSolenoid = new frc::DoubleSolenoid(1, 5, 6);
-spatuclawOpenClose = new frc::DoubleSolenoid(1, 0, 1);
-punchySolenoid = new frc::DoubleSolenoid(1, 2, 3);
+spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
+spatuclawOpenClose = new frc::DoubleSolenoid(1, 2, 3);
+punchySolenoid = new frc::DoubleSolenoid(1, 4, 5);
 LeftClaw = new frc::VictorSP(8);
 LeftClaw->SetInverted(true);
 RightClaw = new frc::VictorSP(9);
