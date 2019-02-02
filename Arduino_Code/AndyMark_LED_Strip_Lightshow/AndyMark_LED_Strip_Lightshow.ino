@@ -53,7 +53,7 @@ CRGB leds[NUM_LEDS];
 //Here we specify which chipset our LEDs run off of by our choice of config function
 
 int sensorPin = DAC1;    // select the input pin for the potentiometer
-int sensorinPin = A0;    // select the input pin for the potentiometer
+int sensorinPin = A1;    // select the input pin for the potentiometer
 
 
 void setup()
@@ -68,10 +68,10 @@ Serial.begin(115200);
   }
   
   Serial.println("Adafruit VL53L0X test");
-  //if (!lox.begin()) {
-    //Serial.println(F("Failed to boot VL53L0X"));
-    //while(1);
- // }
+  if (!lox.begin()) {
+    Serial.println(F("Failed to boot VL53L0X"));
+    while(1);
+  }
   
   // power 
   Serial.println(F("VL53L0X API Simple Ranging example\n\n")); 
@@ -137,35 +137,36 @@ void loop()
    //https://code.google.com/p/fastspi/wiki/CRGBreference
    	//FastLED.clear();
    	//FastLED.show();
-   	delay(10);
+   //	delay(10);
    //CSK 3/20/2014 I added a rainbow function just for grins
   double LedSensor = analogRead(sensorinPin);
   
 Serial.print("Voltage: ");Serial.println(LedSensor);
-  if(LedSensor > 500 && LedSensor < 600){
+  if(LedSensor > 500*1023/3300 && LedSensor < 600*1023/3300){
     solidcolor(CRGB::Orange);
     FastLED.show();
   }
-  else if(LedSensor > 1000 && LedSensor < 1200){
-    //solidcolor(CRGB::PartyMode);
+  else if(LedSensor > 1000*1023/3300 && LedSensor < 1200*1023/3300){
+    solidcolor(CRGB::Red);
     FastLED.show();
   }   
-  else if(LedSensor > 1550 && LedSensor < 1750){
+  else if(LedSensor > 1550*1023/3300 && LedSensor < 1750*1023/3300){
     solidcolor(CRGB::White);
     FastLED.show();
   }    
-  else if(LedSensor > 2100 && LedSensor < 2300){
+  else if(LedSensor > 2100*1023/3300 && LedSensor < 2300*1023/3300){
     solidcolor(CRGB::Blue);
     FastLED.show();
   }    
-  else if(LedSensor > 2650 && LedSensor < 2850){
+  else if(LedSensor > 2650*1023/3300 && LedSensor < 2850*1023/3300){
     solidcolor(CRGB::Yellow);
     FastLED.show();
   }     
   else{
-    solidcolor(CRGB::Red);
+    solidcolor(CRGB::Black);
     FastLED.show();
   }
+  delay(10);
 
     
 }
