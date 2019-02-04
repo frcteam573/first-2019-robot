@@ -183,29 +183,39 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool
 //void Drive::
 
 
-void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed) {
+void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count) {
+  
+  if(count ==0){
+    //Gyro->Reset();
+    Left_encoder->Reset();
+    Right_encoder->Reset();
+  }
   double encoder_val_left = Left_encoder->Get();
   double encoder_val_right = Right_encoder->Get();
-  double encoder_speed_left = Left_encoder->GetRate();
-  double encoder_speed_right = Right_encoder->GetRate();
+  //double encoder_speed_left = Left_encoder->GetRate();
+  //double encoder_speed_right = Right_encoder->GetRate();
+  double gyro_val = Gyro->GetAngle();
 
   double error_left_pos = setpoint_left_pos - encoder_val_left;
   double error_right_pos = setpoint_right_pos - encoder_val_right;
-  double error_left_speed = setpoint_left_speed - encoder_speed_left;
-  double error_right_speed = setpoint_right_speed - encoder_speed_right;
+  //double error_left_speed = setpoint_left_speed - encoder_speed_left;
+  //double error_right_speed = setpoint_right_speed - encoder_speed_right;
+  double error_heading = heading - gyro_val;
 
-  
-  double kp_speed = -.005;
+  double max_speed = 13; //ft/s
+  double kp_speed = 1/max_speed;
   double kp_pos = -.025;
+  double kph = -.025;
 
-  double output_left = (error_left_pos * kp_pos);
-  double output_right = (error_right_pos * kp_pos);
+  double output_left = (error_left_pos * kp_pos) + kp_speed*setpoint_left_speed;
+  double output_right = (error_right_pos * kp_pos) + kp_speed*setpoint_right_speed;
 
+  double turn_val = kph * error_heading;
   //double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
   //double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
 
-  Leftdrive->Set(output_left);
-  Rightdrive->Set(output_right);
+  Leftdrive->Set(output_left + turn_val);
+  Rightdrive->Set(output_right - turn_val);
 
   auto Left_encoderstr = std::to_string(encoder_val_left);
   frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);

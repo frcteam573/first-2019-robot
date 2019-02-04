@@ -105,31 +105,60 @@ void Robot::AutonomousPeriodic() {
  // auto rightinstr = std::to_string(RightStick);
 
 // Push string values to Dashboard
-  frc::SmartDashboard::PutString("DB/String 2",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
+
   // Drive Code Section
+  bool distance_tf_b = false;
   if (button_b){
-    MyDrive.Camera_Centering(leftin, camera_x);
+   distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a and count < 120){
+  else if (button_a and count < 96){
     
     //Get setpoint values from tables
     
     double left_pos = MyAuto.ReturnTableVal(count,0);
     double left_speed = MyAuto.ReturnTableVal(count,1);
+    double right_pos = MyAuto.ReturnTableVal(count,2);
+    double right_speed = MyAuto.ReturnTableVal(count,3);
+    double heading = MyAuto.ReturnTableVal(count,4);
 
-    left_pos = left_pos*120;
-    left_speed = left_speed*120;
     //Call PID Loop to follow path
-    MyDrive.drive_PID(left_pos, 0, left_speed, 0) ;
+    MyDrive.drive_PID(left_pos, 0, left_speed, 0,heading,count) ;
     count ++;
   }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
   }
   
-   
+    //LED section
+  if (distance_tf_b){
+    MyDrive.BlueLeds();
+    
+  }
+  else if (camera_exist==1) {
+    MyDrive.WhiteLeds();
+    
+  }
+  else {
+    MyDrive.OffLeds();
+    
+  }
+  //DashBoard Code
+  MyDrive.Dashboard();
+  MyAppendage.Dashboard();
+  MyLog.Dashboard();
+  frc::SmartDashboard::PutString("Camera TV", to_string(camera_exist));
+  if (camera_exist == 1){
+    frc::SmartDashboard::PutBoolean("Target Secured", true);
+  }
+  else {
+    frc::SmartDashboard::PutBoolean("Target Secured", false);
+  }
+  frc::SmartDashboard::PutString("Camera TX", to_string(camera_x));
+  frc::SmartDashboard::PutString("Camera TA", to_string(image_size));
 }
+
 
 void Robot::TeleopInit() {
   

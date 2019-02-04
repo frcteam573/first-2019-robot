@@ -53,7 +53,7 @@ frc::AnalogInput * FrontDistance;
 
   void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
 
-  void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed);
+  void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
 
   bool platform_adjust();
 
