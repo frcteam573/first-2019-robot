@@ -124,7 +124,7 @@ void Robot::AutonomousPeriodic() {
     double heading = MyAuto.ReturnTableVal(count,4);
 
     //Call PID Loop to follow path
-    MyDrive.drive_PID(left_pos, 0, left_speed, 0,heading,count) ;
+    MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count) ;
     count ++;
   }
   else {

@@ -203,9 +203,9 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   double error_heading = heading - gyro_val;
 
   double max_speed = 13; //ft/s
-  double kp_speed = 1/max_speed;
-  double kp_pos = -.025;
-  double kph = -.025;
+  double kp_speed = 0/max_speed;
+  double kp_pos = 0;
+  double kph = -0.025;
 
   double output_left = (error_left_pos * kp_pos) + kp_speed*setpoint_left_speed;
   double output_right = (error_right_pos * kp_pos) + kp_speed*setpoint_right_speed;
