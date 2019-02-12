@@ -23,6 +23,8 @@
 #include "frc\ADXRS450_Gyro.h"
 #include "frc\Compressor.h"
 #include "rev/CANSparkMax.h"
+#include "rev\CANEncoder.h"
+
 using namespace std;
 
 class Drive : public frc::Subsystem {

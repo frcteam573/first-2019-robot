@@ -15,7 +15,8 @@
 #include "frc\ADXRS450_Gyro.h"
 #include "frc\SPI.h"
 #include "frc\Compressor.h"
-#include "rev/CANSparkMax.h"
+#include "rev\CANSparkMax.h"
+#include "rev\CANEncoder.h"
 
 using namespace std;
 
