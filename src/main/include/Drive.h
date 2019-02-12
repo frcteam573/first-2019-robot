@@ -22,6 +22,7 @@
 #include "frc\AnalogOutput.h"
 #include "frc\ADXRS450_Gyro.h"
 #include "frc\Compressor.h"
+#include "rev/CANSparkMax.h"
 using namespace std;
 
 class Drive : public frc::Subsystem {
@@ -34,7 +35,9 @@ frc::ADXRS450_Gyro * Gyro;
 frc::Compressor * Compressor;
 double Threshold(double in,double thres);
 
-  frc::VictorSP * Leftclimb;
+  rev::CANSparkMax * Leftclimb;
+  rev::CANEncoder * LeftclimbEncoder;
+  //frc::VictorSP * Leftclimb;
   frc::VictorSP * Rightclimb;
   frc::Encoder * Right_encoder;
   frc::Encoder * Left_encoder;

@@ -15,6 +15,7 @@
 #include "frc\ADXRS450_Gyro.h"
 #include "frc\SPI.h"
 #include "frc\Compressor.h"
+#include "rev/CANSparkMax.h"
 
 using namespace std;
 
@@ -24,7 +25,11 @@ Drive::Drive() : Subsystem("Drive") {
 Leftdrive = new frc::VictorSP(1);
 Leftdrive->SetInverted(true);
 Rightdrive = new frc::VictorSP(0);
-Leftclimb = new frc::VictorSP(4);
+
+//Leftclimb = new frc::VictorSP(4);
+Leftclimb = new rev::CANSparkMax (2, rev::CANSparkMax::MotorType::kBrushless);
+LeftclimbEncoder = new rev::CANEncoder(Leftclimb->GetEncoder());
+
 Rightclimb = new frc::VictorSP(5);
 Leftclimb->SetInverted(true);
 Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
@@ -275,6 +280,7 @@ void Drive::OffLeds() {
 
 void Drive::Dashboard(){
 
+  double LeftclimbEncoder_val = LeftclimbEncoder->GetPosition();
   double encoder_val_left = Left_encoder->Get();
   double encoder_val_right = Right_encoder->Get();
 
@@ -283,6 +289,9 @@ void Drive::Dashboard(){
 
   auto Right_encoderstr = std::to_string(encoder_val_right);
   frc::SmartDashboard::PutString("Right Encoder",Right_encoderstr);
+
+ auto LeftclimbEncoderstr = std::to_string(LeftclimbEncoder_val);
+  frc::SmartDashboard::PutString("DB/String 5",LeftclimbEncoderstr);
 
 
   double gyro_val = Gyro->GetAngle();
