@@ -113,7 +113,7 @@ void Robot::AutonomousPeriodic() {
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a and count < 96){
+  else if (button_a and count < 166){
     
     //Get setpoint values from tables
     
@@ -325,6 +325,9 @@ else {
   }
   frc::SmartDashboard::PutString("Camera TX", to_string(camera_x));
   frc::SmartDashboard::PutString("Camera TA", to_string(image_size));
+
+
+
 }
 
 void Robot::TestPeriodic() {}
