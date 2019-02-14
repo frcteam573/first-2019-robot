@@ -20,7 +20,7 @@
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
 #include "frc\AnalogOutput.h"
-#include "frc\ADXRS450_Gyro.h"
+#include "frc\AnalogGyro.h"
 #include "frc\Compressor.h"
 using namespace std;
 
@@ -30,7 +30,7 @@ class Drive : public frc::Subsystem {
 frc::VictorSP * Leftdrive;
 frc::VictorSP * Rightdrive;
 frc::AnalogOutput * Leds;
-frc::ADXRS450_Gyro * Gyro;
+frc::AnalogGyro * Gyro;
 frc::Compressor * Compressor;
 double Threshold(double in,double thres);
 

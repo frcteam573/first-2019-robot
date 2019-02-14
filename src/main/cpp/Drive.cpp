@@ -12,7 +12,7 @@
 #include "frc\Encoder.h"
 #include "frc\AnalogInput.h"
 #include "frc\AnalogOutput.h"
-#include "frc\ADXRS450_Gyro.h"
+#include "frc\AnalogGyro.h"
 #include "frc\SPI.h"
 #include "frc\Compressor.h"
 
@@ -31,7 +31,7 @@ Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
-Gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
+Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
 }
 
@@ -205,7 +205,7 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   double max_speed = 13; //ft/s
   double kp_speed = -1/max_speed;
   double kp_pos = -0.025;
-  double kph = 0;//-0.025;
+  double kph = 0.01;
 
   double output_left = (error_left_pos * kp_pos) + kp_speed*setpoint_left_speed;
   double output_right = (error_right_pos * kp_pos) + kp_speed*setpoint_right_speed;
