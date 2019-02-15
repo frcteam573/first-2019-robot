@@ -58,6 +58,7 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   int count = 0;
+  int count_2 = 0;
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -75,6 +76,7 @@ void Robot::AutonomousPeriodic() {
   double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
   bool button_b = controller1.GetRawButton(2);
   bool button_a = controller1.GetRawButton(1); 
+  bool button_y = controller1.GetRawButton(4);
   bool button_lb = controller1.GetRawButton(5);
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
@@ -110,10 +112,13 @@ void Robot::AutonomousPeriodic() {
 
   // Drive Code Section
   bool distance_tf_b = false;
+  double count_max = MyAuto.ReturnTableVal(0,5);
+  int count_max_int = (int)count_max;
+  
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a and count < 166){
+  else if (button_a and count < count_max_int){
     
     //Get setpoint values from tables
     
@@ -122,11 +127,25 @@ void Robot::AutonomousPeriodic() {
     double right_pos = MyAuto.ReturnTableVal(count,2);
     double right_speed = MyAuto.ReturnTableVal(count,3);
     double heading = MyAuto.ReturnTableVal(count,4);
+    
 
     //Call PID Loop to follow path
     MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count) ;
     count ++;
   }
+
+else if (button_y and count_2 < 100){
+  
+  if (count_2 < 20){
+    MyDrive.encoder_drive(-100, count_2);
+    
+  }
+  else if (count_2 < 100){
+    MyDrive.gyro_drive(180); 
+  }
+  count_2 ++;
+}
+
   else {
     MyDrive.Joystick_drive(leftin,rightin);
   }

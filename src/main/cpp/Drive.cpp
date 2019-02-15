@@ -227,6 +227,61 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
 }
 
+void Drive::encoder_drive(double setpoint, int count){
+  double gyro_val_constant;
+  if(count == 0){
+    //Gyro->Reset();
+    Left_encoder->Reset();
+    Right_encoder->Reset();
+    gyro_val_constant = Gyro->GetAngle();
+  }
+  double encoder_val_left = Left_encoder->Get();
+  double encoder_val_right = Right_encoder->Get();
+  //double encoder_speed_left = Left_encoder->GetRate();
+  //double encoder_speed_right = Right_encoder->GetRate();
+  double gyro_val = Gyro->GetAngle();
+
+  double error_left_pos = setpoint - encoder_val_left;
+  double error_right_pos = setpoint - encoder_val_right;
+  //double error_left_speed = setpoint_left_speed - encoder_speed_left;
+  //double error_right_speed = setpoint_right_speed - encoder_speed_right;
+  double error_heading = gyro_val_constant - gyro_val;
+
+  double kp_pos = -0.025;
+  double kph = 0.01;
+
+  double output_left = (error_left_pos * kp_pos) ;
+  double output_right = (error_right_pos * kp_pos) ;
+
+  double turn_val = kph * error_heading;
+  //double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
+  //double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
+
+  Leftdrive->Set(output_left + turn_val);
+  Rightdrive->Set(output_right - turn_val);
+}
+
+void Drive::gyro_drive(double setpoint){
+  
+  
+  double gyro_val = Gyro->GetAngle();
+  if (gyro_val < 0){
+    setpoint = -1 * setpoint;
+  }
+
+  
+  double error_heading = setpoint - gyro_val;
+
+  
+  double kph = -0.01;
+
+  
+  double turn_val = kph * error_heading;
+ 
+  Leftdrive->Set(0 + turn_val);
+  Rightdrive->Set(0 - turn_val);
+}
+
 
 bool Drive::platform_adjust(){
   double AnalogIn = FrontDistance->GetVoltage();

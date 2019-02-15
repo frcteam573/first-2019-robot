@@ -55,6 +55,10 @@ frc::AnalogInput * FrontDistance;
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
 
+  void encoder_drive(double setpoint, int count);
+
+  void gyro_drive(double setpoint);
+
   bool platform_adjust();
 
   void OrangeLeds();
