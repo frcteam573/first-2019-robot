@@ -229,7 +229,7 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
 
 void Drive::encoder_drive(double setpoint, int count){
   double gyro_val_constant;
-  if(count == 0){
+  if(count == -40){
     //Gyro->Reset();
     Left_encoder->Reset();
     Right_encoder->Reset();

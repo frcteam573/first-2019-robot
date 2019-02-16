@@ -58,7 +58,7 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   int count = 0;
-  int count_2 = 0;
+  int count_2 = -40;
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -114,6 +114,8 @@ void Robot::AutonomousPeriodic() {
   bool distance_tf_b = false;
   double count_max = MyAuto.ReturnTableVal(0,5);
   int count_max_int = (int)count_max;
+  double count_max_2 = MyAuto.ReturnTableVal_2(0,5);
+  int count_max_int_2 = (int)count_max_2;
   
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
@@ -132,24 +134,37 @@ void Robot::AutonomousPeriodic() {
     //Call PID Loop to follow path
     MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count) ;
     count ++;
+    count_2 = -40;
   }
 
-else if (button_y and count_2 < 100){
+else if (button_y and count_2 < count_max_int_2){
   
-  if (count_2 < 20){
-    MyDrive.encoder_drive(-100, count_2);
+  if (count_2 < -20){
+    MyDrive.encoder_drive(-150, count_2);
     
   }
-  else if (count_2 < 100){
+  else if (count_2 < 0){
     MyDrive.gyro_drive(180); 
   }
-  count_2 ++;
+  else if (count_2 < count_max_int_2){
+    double left_pos = MyAuto.ReturnTableVal_2(count_2,0);
+    double left_speed = MyAuto.ReturnTableVal_2(count_2,1);
+    double right_pos = MyAuto.ReturnTableVal_2(count_2,2);
+    double right_speed = MyAuto.ReturnTableVal_2(count_2,3);
+    double heading = MyAuto.ReturnTableVal_2(count_2,4);
+    
+
+    //Call PID Loop to follow path
+    MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count_2) ;
+  }
+  count_2++;
 }
 
   else {
     MyDrive.Joystick_drive(leftin,rightin);
   }
-  
+
+frc::SmartDashboard::PutString("DB/String 4", to_string(count_2));
     //LED section
   if (distance_tf_b){
     MyDrive.BlueLeds();
