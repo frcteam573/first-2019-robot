@@ -22,6 +22,7 @@
 #include "frc\AnalogOutput.h"
 #include "frc\AnalogGyro.h"
 #include "frc\Compressor.h"
+#include "frc\DoubleSolenoid.h"
 using namespace std;
 
 class Drive : public frc::Subsystem {
@@ -32,10 +33,12 @@ frc::VictorSP * Rightdrive;
 frc::AnalogOutput * Leds;
 frc::AnalogGyro * Gyro;
 frc::Compressor * Compressor;
+frc::DoubleSolenoid * frontclimbSolenoid;
+frc::DoubleSolenoid * backclimbSolenoid;
 double Threshold(double in,double thres);
 
-  frc::VictorSP * Leftclimb;
-  frc::VictorSP * Rightclimb;
+  frc::VictorSP * Trollyclimb;
+  //frc::VictorSP * Rightclimb;
   frc::Encoder * Right_encoder;
   frc::Encoder * Left_encoder;
 
@@ -51,7 +54,7 @@ frc::AnalogInput * FrontDistance;
   
   bool Camera_Centering_Distance(float camera_x, float camera_size);
 
-  void Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back);
+  void Climb_Extend(bool button_lb, bool button_rb, double leftjoystick);
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
 

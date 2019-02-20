@@ -81,6 +81,7 @@ void Robot::AutonomousPeriodic() {
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
   bool button_back = controller1.GetRawButton(7);
+  bool right_trigger = controller1.GetRawAxis(3);
   bool button_lb2 = controller2.GetRawButton(5);
   bool button_rb2 = controller2.GetRawButton(6);
   bool button_start2 = controller2.GetRawButton(8);
@@ -210,6 +211,7 @@ void Robot::TeleopPeriodic() {
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
   bool button_back = controller1.GetRawButton(7);
+  bool right_trigger = controller1.GetRawAxis(3);
   bool button_lb2 = controller2.GetRawButton(5);
   bool button_rb2 = controller2.GetRawButton(6);
   bool button_start2 = controller2.GetRawButton(8);
@@ -247,9 +249,9 @@ void Robot::TeleopPeriodic() {
   else if (button_a){
     distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
   }
-  else if (button_y){
-    distance_platform = MyDrive.platform_adjust();
-  }
+  //else if (button_y){
+  //  distance_platform = MyDrive.platform_adjust();
+  //}
   else {
     MyDrive.Joystick_drive(leftin,rightin);
 
@@ -260,7 +262,7 @@ void Robot::TeleopPeriodic() {
   }
 
   //Climber code section
-  MyDrive.Climb_Extend(button_lb, button_rb, button_start, button_back);
+  MyDrive.Climb_Extend(button_lb, button_rb, leftin);
 
   //Logging section
   MyLog.PDP(15, 0, true);

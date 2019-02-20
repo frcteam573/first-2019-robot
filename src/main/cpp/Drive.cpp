@@ -15,6 +15,7 @@
 #include "frc\AnalogGyro.h"
 #include "frc\SPI.h"
 #include "frc\Compressor.h"
+#include "frc\DoubleSolenoid.h"
 
 using namespace std;
 
@@ -24,15 +25,17 @@ Drive::Drive() : Subsystem("Drive") {
 Leftdrive = new frc::VictorSP(1);
 Leftdrive->SetInverted(true);
 Rightdrive = new frc::VictorSP(0);
-Leftclimb = new frc::VictorSP(4);
-Rightclimb = new frc::VictorSP(5);
-Leftclimb->SetInverted(true);
+Trollyclimb = new frc::VictorSP(4);
+//Rightclimb = new frc::VictorSP(5);
+Trollyclimb->SetInverted(true);
 Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
 Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
+frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
+backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
 }
 
 void Drive::InitDefaultCommand() {
@@ -159,26 +162,26 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 }
 
 //Climber code
-void Drive::Climb_Extend(bool button_lb, bool button_rb, bool button_start, bool button_back){
+void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
 
-  if (button_lb && button_rb){
-
-    Leftclimb->Set(1);
-    Rightclimb->Set(1);
-    Compressor->Stop();
+  if (button_lb){
+    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
   }
-  else if (button_start && button_back){
-    Leftclimb->Set(-.5);
-    Rightclimb->Set(-.5);
+  else {
+    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+  }
+
+  if (button_rb){
+    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+    leftjoystick = leftjoystick*leftjoystick*leftjoystick; 
+    Trollyclimb->Set(leftjoystick);
   }
   else{
-    Leftclimb->Set(0);
-    Rightclimb->Set(0);
-    Compressor->Start();
+    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+    Trollyclimb->Set(0);
+  }
   }
 
-
-}
 
 //void Drive::
 
@@ -283,7 +286,7 @@ void Drive::gyro_drive(double setpoint){
 }
 
 
-bool Drive::platform_adjust(){
+/*bool Drive::platform_adjust(){
   double AnalogIn = FrontDistance->GetVoltage();
   double error = 1.26 - AnalogIn;
   double kp_c = .7;
@@ -301,7 +304,7 @@ bool Drive::platform_adjust(){
     distance_tf = false;
   }
   return distance_tf;
-}
+}*/
 
 void Drive::OrangeLeds() {
 
