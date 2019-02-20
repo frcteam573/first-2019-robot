@@ -25,9 +25,9 @@ Drive::Drive() : Subsystem("Drive") {
 Leftdrive = new frc::VictorSP(1);
 Leftdrive->SetInverted(true);
 Rightdrive = new frc::VictorSP(0);
-Trollyclimb = new frc::VictorSP(4);
-//Rightclimb = new frc::VictorSP(5);
-Trollyclimb->SetInverted(true);
+//Leftclimb = new frc::VictorSP(4);
+Trollyclimb = new frc::VictorSP(5);
+//Leftclimb->SetInverted(true);
 Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
 Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
 FrontDistance = new frc::AnalogInput(2);
