@@ -30,6 +30,7 @@ void Robot::RobotInit() {
   MyAppendage.spatuclawClose();
   MyAppendage.punchyIn();
   MyDrive.OrangeLeds();
+  bool spatuclawState = false;
   
 
 }
@@ -59,6 +60,7 @@ void Robot::AutonomousInit() {
   m_autoSelected = m_chooser.GetSelected();
   int count = 0;
   int count_2 = -40;
+  int count_3 = -40;
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -117,6 +119,8 @@ void Robot::AutonomousPeriodic() {
   int count_max_int = (int)count_max;
   double count_max_2 = MyAuto.ReturnTableVal_2(0,5);
   int count_max_int_2 = (int)count_max_2;
+  double count_max_3 = MyAuto.ReturnTableVal_3(0,5);
+  int count_max_int_3 = (int)count_max_3;
   
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
@@ -159,6 +163,30 @@ else if (button_y and count_2 < count_max_int_2){
     MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count_2) ;
   }
   count_2++;
+  count_3 = -40;
+}
+
+else if (button_y and count_3 < count_max_int_3){
+  
+  if (count_3 < -20){
+    MyDrive.encoder_drive(-150, count_2);
+    
+  }
+  else if (count_3 < 0){
+    MyDrive.gyro_drive(0); 
+  }
+  else if (count_3 < count_max_int_3){
+    double left_pos = MyAuto.ReturnTableVal_2(count_3,0);
+    double left_speed = MyAuto.ReturnTableVal_2(count_3,1);
+    double right_pos = MyAuto.ReturnTableVal_2(count_3,2);
+    double right_speed = MyAuto.ReturnTableVal_2(count_3,3);
+    double heading = MyAuto.ReturnTableVal_2(count_3,4);
+    
+
+    //Call PID Loop to follow path
+    MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count_3) ;
+  }
+  count_3++;
 }
 
   else {
@@ -276,10 +304,12 @@ void Robot::TeleopPeriodic() {
   }
   
   if (button_start2){
-    MyAppendage.spatuclawOpen();
+    
+    spatuclawState = MyAppendage.spatuclawOpen();
+    
   }
   else if (button_back2){
-    MyAppendage.spatuclawClose();
+    spatuclawState = MyAppendage.spatuclawClose();
   }
   
   if (right_trigger2 > 0.5){
@@ -288,6 +318,14 @@ void Robot::TeleopPeriodic() {
   else {
     MyAppendage.punchyIn();
   }
+
+if (left_trigger2 > 0.5){
+    MyAppendage.extensionOut();
+  }
+  else {
+    MyAppendage.extensionIn();
+  }
+
 
   if (d_pad2 > 45 and d_pad2 < 135){
     MyAppendage.spatuclawIn();
@@ -301,7 +339,7 @@ void Robot::TeleopPeriodic() {
 
     
   if (button_a2) {
-    if (left_trigger2 > 0.5){
+    if (spatuclawState){
       MyAppendage.elevator_PID(250);
     }
     else {
@@ -309,7 +347,7 @@ void Robot::TeleopPeriodic() {
     }
   }
   else if (button_b2) {
-    if (left_trigger2 > 0.5){
+    if (spatuclawState){
       MyAppendage.elevator_PID(750);
     }
     else {
@@ -317,7 +355,7 @@ void Robot::TeleopPeriodic() {
     }
   }
   else if (button_y2) {
-    if (left_trigger2 > 0.5){
+    if (spatuclawState){
       MyAppendage.elevator_PID(1250);
     }
     else {

@@ -27,6 +27,7 @@ class Auto : public frc::Subsystem {
   Auto();
   double ReturnTableVal(int count, int select);
   double ReturnTableVal_2(int count, int select);
+  double ReturnTableVal_3(int count, int select);
 // User Wrtitten Functions Definitions here.
 
 };

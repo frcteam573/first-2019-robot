@@ -33,16 +33,19 @@ class Appendage : public frc::Subsystem {
  frc::VictorSP * RightClaw;
  frc::VictorSP * elevator;
  frc::Encoder * elevator_encoder;
+ frc::DoubleSolenoid * extendSolenoid;
   //frc::VictorSP * Rightclimb;
 
  public:
   Appendage();
   void spatuclawRetract();
   void spatuclawExtend();
-  void spatuclawOpen();
-  void spatuclawClose();
+  bool spatuclawOpen();
+  bool spatuclawClose();
   void punchyIn();
   void punchyOut();
+  void extensionOut();
+  void extensionIn();
   void spatuclawIn();
   void spatuclawOut();
   void spatuclawStop();

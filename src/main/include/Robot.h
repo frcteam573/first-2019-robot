@@ -46,5 +46,7 @@ class Robot : public frc::TimedRobot {
   std::string m_autoSelected;
   int count;
   int count_2;
+  int count_3;
+  bool spatuclawState;
   
 };

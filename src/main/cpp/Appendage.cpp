@@ -19,6 +19,7 @@ Appendage::Appendage() : Subsystem("Appendage") {
 spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
 spatuclawOpenClose = new frc::DoubleSolenoid(1, 2, 3);
 punchySolenoid = new frc::DoubleSolenoid(1, 4, 5);
+extendSolenoid = new frc::DoubleSolenoid(1, 7, 8);
 LeftClaw = new frc::VictorSP(8);
 LeftClaw->SetInverted(true);
 RightClaw = new frc::VictorSP(9);
@@ -38,12 +39,14 @@ void Appendage::spatuclawRetract() {
 
 }
 
-void Appendage::spatuclawOpen() {
+bool Appendage::spatuclawOpen() {
   spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kForward);
+  return true;
 }
 
-void Appendage::spatuclawClose() {
+bool Appendage::spatuclawClose() {
   spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kReverse);
+  return false;
 }
 
 void Appendage::punchyOut() {
@@ -53,6 +56,15 @@ void Appendage::punchyOut() {
 void Appendage::punchyIn() {
   punchySolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 }
+
+void Appendage::extensionOut() {
+  extendSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+}
+
+void Appendage::extensionIn() {
+  extendSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+}
+
 
 void Appendage::spatuclawIn() {
   LeftClaw->Set(0.8);
