@@ -47,7 +47,7 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 CRGB leds[NUM_LEDS];
 
 //CSK 3/17/2014 I moved this to a pin that doesn't conflict with Ethernet functions in case you want to control LEDs via Ethernet
-#define DATA_PIN          6 //White wire from the http://www.andymark.com/product-p/am-2917.htm power connector
+#define DATA_PIN          7 //White wire from the http://www.andymark.com/product-p/am-2917.htm power connector
 
 //This function is used to setup things like pins, Serial ports etc.
 //Here we specify which chipset our LEDs run off of by our choice of config function
@@ -60,21 +60,7 @@ void setup()
 {
 
 
-Serial.begin(115200);
 
-  // wait until serial port opens for native USB devices
-  while (! Serial) {
-    delay(1);
-  }
-  
-  Serial.println("Adafruit VL53L0X test");
-  if (!lox.begin()) {
-    Serial.println(F("Failed to boot VL53L0X"));
-    while(1);
-  }
-  
-  // power 
-  Serial.println(F("VL53L0X API Simple Ranging example\n\n")); 
    // Uncomment one of the following lines for your leds arrangement.
    // FastLED.addLeds<TM1803, DATA_PIN, RGB>(leds, NUM_LEDS);
    // FastLED.addLeds<TM1804, DATA_PIN, RGB>(leds, NUM_LEDS);
@@ -104,8 +90,38 @@ Serial.begin(115200);
    FastLED.setBrightness(MAX_BRIGHTNESS);
    fill_solid( leds, NUM_LEDS /*number of leds*/, CRGB( 125, 125, 125) );
    FastLED.show();
+
+    solidcolor(CRGB::Purple);
+    FastLED.show();
+    delay(2);
    // start serial port at 9600 bps:
    //Serial.begin(9600);
+
+    solidcolor(CRGB::Black);
+    FastLED.show();
+
+  Serial.begin(115200);
+
+  // wait until serial port opens for native USB devices
+  while (! Serial) {
+    delay(1);
+  }
+  
+  Serial.println("Adafruit VL53L0X test");
+  if (!lox.begin()) {
+    Serial.println(F("Failed to boot VL53L0X"));
+    while(1);
+  }
+  
+  // power 
+  Serial.println(F("VL53L0X API Simple Ranging example\n\n"));
+
+    solidcolor(CRGB::White);
+    FastLED.show();
+    delay(2);
+
+
+   
 }
 
 void loop()
@@ -142,7 +158,7 @@ void loop()
   double LedSensor = analogRead(sensorinPin);
   
 Serial.print("Voltage: ");Serial.println(LedSensor);
-  if(LedSensor > 500*1023/3300 && LedSensor < 600*1023/3300){
+  if((LedSensor > 500*1023/3300 && LedSensor < 600*1023/3300) || LedSensor == 0){
     solidcolor(CRGB::Orange);
     FastLED.show();
   }
