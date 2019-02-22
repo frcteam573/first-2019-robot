@@ -93,7 +93,7 @@ void setup()
 
     solidcolor(CRGB::Purple);
     FastLED.show();
-    delay(2);
+    delay(2000);
    // start serial port at 9600 bps:
    //Serial.begin(9600);
 
@@ -118,7 +118,7 @@ void setup()
 
     solidcolor(CRGB::White);
     FastLED.show();
-    delay(2);
+    delay(2000);
 
 
    
