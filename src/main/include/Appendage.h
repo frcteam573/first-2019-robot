@@ -34,6 +34,7 @@ class Appendage : public frc::Subsystem {
  frc::VictorSP * elevator;
  frc::Encoder * elevator_encoder;
  frc::DoubleSolenoid * extendSolenoid;
+ frc::DigitalInput * limit_switch;
   //frc::VictorSP * Rightclimb;
 
  public:

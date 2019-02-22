@@ -25,6 +25,7 @@ LeftClaw->SetInverted(true);
 RightClaw = new frc::VictorSP(9);
 elevator = new frc::VictorSP(6);
 elevator_encoder = new frc::Encoder( 6, 7, false, frc::Encoder::k4X);
+limit_switch = new frc::DigitalInput(8);
 }
 
 void Appendage::spatuclawExtend() {
@@ -67,8 +68,14 @@ void Appendage::extensionIn() {
 
 
 void Appendage::spatuclawIn() {
-  LeftClaw->Set(0.8);
-  RightClaw->Set(0.8);
+  if (limit_switch->Get()){
+    LeftClaw->Set(0);
+    RightClaw->Set(0);
+  }
+  else{
+    LeftClaw->Set(0.8);
+    RightClaw->Set(0.8);
+  }
 }
 
 void Appendage::spatuclawOut() {
