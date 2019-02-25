@@ -19,7 +19,7 @@ Appendage::Appendage() : Subsystem("Appendage") {
 spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
 spatuclawOpenClose = new frc::DoubleSolenoid(1, 2, 3);
 punchySolenoid = new frc::DoubleSolenoid(1, 4, 5);
-extendSolenoid = new frc::DoubleSolenoid(1, 7, 8);
+extendSolenoid = new frc::DoubleSolenoid(1, 6, 7);
 LeftClaw = new frc::VictorSP(8);
 LeftClaw->SetInverted(true);
 RightClaw = new frc::VictorSP(9);
@@ -68,7 +68,7 @@ void Appendage::extensionIn() {
 
 
 void Appendage::spatuclawIn() {
-  if (limit_switch->Get()){
+  if (false){ 
     LeftClaw->Set(0);
     RightClaw->Set(0);
   }

@@ -61,6 +61,7 @@ void Robot::AutonomousInit() {
   int count = 0;
   int count_2 = -40;
   int count_3 = -40;
+  int count_4 = 0;
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -121,12 +122,23 @@ void Robot::AutonomousPeriodic() {
   int count_max_int_2 = (int)count_max_2;
   double count_max_3 = MyAuto.ReturnTableVal_3(0,5);
   int count_max_int_3 = (int)count_max_3;
-  
+  int count_max_int_4 = 10;
+  auto start_pos = frc::SmartDashboard::GetString("Starting Position","0");
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a and count < count_max_int){
+  else if (button_a and count_4 < count_max_int_4 and start_pos == "1"){
+    if (count_4 <5){
+      MyDrive.encoder_drive(500, count_4);
+    }
+    else if (count_4 < count_max_int_4){
+      MyDrive.encoder_drive(-250, count_4);
+    }
     
+    count_4 ++;
+  }
+  else if (button_a and count < count_max_int){
+
     //Get setpoint values from tables
     
     double left_pos = MyAuto.ReturnTableVal(count,0);

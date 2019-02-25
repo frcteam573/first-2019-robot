@@ -34,8 +34,8 @@ FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
 Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
-frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
-backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
+//frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
+//backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
 }
 
 void Drive::InitDefaultCommand() {
@@ -165,19 +165,19 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
 
   if (button_lb){
-    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+   // frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
   }
   else {
-    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+    //frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
   }
 
   if (button_rb){
-    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+    //backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
     leftjoystick = leftjoystick*leftjoystick*leftjoystick; 
     Trollyclimb->Set(leftjoystick);
   }
   else{
-    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+    //backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
     Trollyclimb->Set(0);
   }
   }
