@@ -178,7 +178,7 @@ else if (button_y and count_2 < count_max_int_2){
   count_3 = -40;
 }
 
-else if (button_y and count_3 < count_max_int_3){
+else if (button_x and count_3 < count_max_int_3){
   
   if (count_3 < -20){
     MyDrive.encoder_drive(-150, count_2);
