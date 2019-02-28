@@ -80,6 +80,7 @@ void Robot::AutonomousPeriodic() {
   bool button_b = controller1.GetRawButton(2);
   bool button_a = controller1.GetRawButton(1); 
   bool button_y = controller1.GetRawButton(4);
+  bool button_x = controller1.GetRawButton(3);
   bool button_lb = controller1.GetRawButton(5);
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
@@ -122,17 +123,17 @@ void Robot::AutonomousPeriodic() {
   int count_max_int_2 = (int)count_max_2;
   double count_max_3 = MyAuto.ReturnTableVal_3(0,5);
   int count_max_int_3 = (int)count_max_3;
-  int count_max_int_4 = 10;
+  int count_max_int_4 = 80;
   auto start_pos = frc::SmartDashboard::GetString("Starting Position","0");
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
   else if (button_a and count_4 < count_max_int_4 and start_pos == "1"){
-    if (count_4 <5){
-      MyDrive.encoder_drive(500, count_4);
+    if (count_4 <40){
+      MyDrive.encoder_drive(525, count_4, 0.5);
     }
     else if (count_4 < count_max_int_4){
-      MyDrive.encoder_drive(-250, count_4);
+      MyDrive.encoder_drive(150, count_4, 0.5);
     }
     
     count_4 ++;
@@ -157,7 +158,7 @@ void Robot::AutonomousPeriodic() {
 else if (button_y and count_2 < count_max_int_2){
   
   if (count_2 < -20){
-    MyDrive.encoder_drive(-150, count_2);
+    MyDrive.encoder_drive(-150, count_2, 1);
     
   }
   else if (count_2 < 0){
@@ -181,7 +182,7 @@ else if (button_y and count_2 < count_max_int_2){
 else if (button_x and count_3 < count_max_int_3){
   
   if (count_3 < -20){
-    MyDrive.encoder_drive(-150, count_2);
+    MyDrive.encoder_drive(-150, count_3, 1);
     
   }
   else if (count_3 < 0){
@@ -232,6 +233,83 @@ frc::SmartDashboard::PutString("DB/String 4", to_string(count_2));
   }
   frc::SmartDashboard::PutString("Camera TX", to_string(camera_x));
   frc::SmartDashboard::PutString("Camera TA", to_string(image_size));
+
+// OPerator controls
+
+// Appendage code
+  if (button_lb2){
+    MyAppendage.spatuclawExtend();
+  }
+  else if (button_rb2){
+    MyAppendage.spatuclawRetract();
+  }
+  
+  if (button_start2){
+    
+    spatuclawState = MyAppendage.spatuclawOpen();
+    
+  }
+  else if (button_back2){
+    spatuclawState = MyAppendage.spatuclawClose();
+  }
+  
+  if (right_trigger2 > 0.5){
+    MyAppendage.punchyOut();
+  }
+  else {
+    MyAppendage.punchyIn();
+  }
+
+if (left_trigger2 > 0.5){
+    MyAppendage.extensionOut();
+  }
+  else {
+    MyAppendage.extensionIn();
+  }
+
+
+  if (d_pad2 > 45 and d_pad2 < 135){
+    MyAppendage.spatuclawIn();
+  }
+  else if (d_pad2 > 225 and d_pad2 < 315){
+    MyAppendage.spatuclawOut();
+  }
+  else {
+    MyAppendage.spatuclawStop();
+  }
+
+    
+  if (button_a2) {
+    if (spatuclawState){
+      MyAppendage.elevator_PID(250);
+    }
+    else {
+      MyAppendage.elevator_PID(1);
+    }
+  }
+  else if (button_b2) {
+    if (spatuclawState){
+      MyAppendage.elevator_PID(750);
+    }
+    else {
+      MyAppendage.elevator_PID(500);
+    }
+  }
+  else if (button_y2) {
+    if (spatuclawState){
+      MyAppendage.elevator_PID(1250);
+    }
+    else {
+      MyAppendage.elevator_PID(1000);
+    }
+  }
+  else {
+    MyAppendage.elevator_joystick(leftin2);
+  }
+
+  //END OPERATOR COntrols
+
+
 }
 
 
@@ -247,11 +325,14 @@ void Robot::TeleopPeriodic() {
   bool button_b = controller1.GetRawButton(2);
   bool button_a = controller1.GetRawButton(1); 
   bool button_y = controller1.GetRawButton(4);
+  bool button_x = controller1.GetRawButton(3);
   bool button_lb = controller1.GetRawButton(5);
   bool button_rb = controller1.GetRawButton(6);
   bool button_start = controller1.GetRawButton(8);
   bool button_back = controller1.GetRawButton(7);
   bool right_trigger = controller1.GetRawAxis(3);
+  //double leftin2 = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
+  //double rightin2 = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
   bool button_lb2 = controller2.GetRawButton(5);
   bool button_rb2 = controller2.GetRawButton(6);
   bool button_start2 = controller2.GetRawButton(8);

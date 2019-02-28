@@ -34,8 +34,8 @@ FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
 Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
-//frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
-//backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
+frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
+backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
 }
 
 void Drive::InitDefaultCommand() {
@@ -165,19 +165,19 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
 
   if (button_lb){
-   // frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+   frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
   }
   else {
-    //frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
   }
 
   if (button_rb){
-    //backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
+    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
     leftjoystick = leftjoystick*leftjoystick*leftjoystick; 
     Trollyclimb->Set(leftjoystick);
   }
   else{
-    //backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
+    backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
     Trollyclimb->Set(0);
   }
   }
@@ -207,8 +207,8 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
 
   double max_speed = 13; //ft/s
   double kp_speed = -1/max_speed;
-  double kp_pos = -0.025;
-  double kph = 0.01;
+  double kp_pos = 0; //-0.025;
+  double kph = -0.01;  //0.01;
 
   double output_left = (error_left_pos * kp_pos) + kp_speed*setpoint_left_speed;
   double output_right = (error_right_pos * kp_pos) + kp_speed*setpoint_right_speed;
@@ -230,7 +230,7 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
 }
 
-void Drive::encoder_drive(double setpoint, int count){
+void Drive::encoder_drive(double setpoint, int count, double thresh_speed){
   double gyro_val_constant;
   if(count == -40){
     //Gyro->Reset();
@@ -253,13 +253,13 @@ void Drive::encoder_drive(double setpoint, int count){
   double kp_pos = -0.025;
   double kph = 0.01;
 
-  double output_left = (error_left_pos * kp_pos) ;
-  double output_right = (error_right_pos * kp_pos) ;
+  double output_left = Threshold((error_left_pos * kp_pos), thresh_speed) ;
+  double output_right = Threshold((error_right_pos * kp_pos), thresh_speed) ;
 
   double turn_val = kph * error_heading;
   //double output_left = (error_left_pos * kp_pos) + (error_left_speed * kp_speed) * .05;
   //double output_right = (error_right_pos * kp_pos) + (error_right_speed * kp_speed) * .05;
-
+  
   Leftdrive->Set(output_left + turn_val);
   Rightdrive->Set(output_right - turn_val);
 }

@@ -113,7 +113,7 @@ if (left_or_right == "2"){
         output = (a_right [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = 1 * a_left [count] [3];
+        output = -1 * a_left [count] [3];
     }
 
     if (select==5){
@@ -136,7 +136,7 @@ if (left_or_right == "1"){
         output = (a_left [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = -1 * a_left [count] [3];
+        output = 1 * a_left [count] [3];
     }
 
     if (select==5){
@@ -239,7 +239,7 @@ if (left_or_right == "2"){
         output = (a_right [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = 1 * a_left [count] [3];
+        output = -1 * a_left [count] [3];
     }
 
     if (select==5){
@@ -262,7 +262,7 @@ if (left_or_right == "1"){
         output = (a_left [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = -1 * a_left [count] [3];
+        output = 1 * a_left [count] [3];
     }
 
     if (select==5){
@@ -386,7 +386,7 @@ if (left_or_right == "2"){
         output = (a_right [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = 1 * a_left [count] [3];
+        output = -1 * a_left [count] [3];
     }
 
     if (select==5){
@@ -409,7 +409,7 @@ if (left_or_right == "1"){
         output = (a_left [count] [2]) * speed_conv;  
     }
     if (select == 4){
-        output = -1 * a_left [count] [3];
+        output = 1 * a_left [count] [3];
     }
 
     if (select==5){
