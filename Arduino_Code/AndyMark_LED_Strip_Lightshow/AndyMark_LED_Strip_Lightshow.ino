@@ -47,7 +47,7 @@ Adafruit_VL53L0X lox = Adafruit_VL53L0X();
 CRGB leds[NUM_LEDS];
 
 //CSK 3/17/2014 I moved this to a pin that doesn't conflict with Ethernet functions in case you want to control LEDs via Ethernet
-#define DATA_PIN          7 //White wire from the http://www.andymark.com/product-p/am-2917.htm power connector
+#define DATA_PIN          6 //White wire from the http://www.andymark.com/product-p/am-2917.htm power connector
 
 //This function is used to setup things like pins, Serial ports etc.
 //Here we specify which chipset our LEDs run off of by our choice of config function
@@ -98,24 +98,6 @@ void setup()
    //Serial.begin(9600);
 
     solidcolor(CRGB::Black);
-    FastLED.show();
-
-  Serial.begin(115200);
-
-  // wait until serial port opens for native USB devices
-  while (! Serial) {
-    delay(1);
-  }
-  
-  Serial.println("Adafruit VL53L0X test");
-  if (!lox.begin()) {
-    Serial.println(F("Failed to boot VL53L0X"));
-    while(1);
-  }
-  
-  // power 
-  Serial.println(F("VL53L0X API Simple Ranging example\n\n"));
-
     solidcolor(CRGB::White);
     FastLED.show();
     delay(2000);
