@@ -433,26 +433,26 @@ if (left_trigger2 > 0.5){
     
   if (button_a2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(250);
+      MyAppendage.elevator_PID(250); //Low rocket cargo 
     }
     else {
-      MyAppendage.elevator_PID(1);
+      MyAppendage.elevator_PID(1); // Base elevator level for hatches
     }
   }
   else if (button_b2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(750);
+      MyAppendage.elevator_PID(750); // Mid rocket cargo
     }
     else {
-      MyAppendage.elevator_PID(500);
+      MyAppendage.elevator_PID(500); // Mid rocket hatch
     }
   }
   else if (button_y2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(1250);
+      MyAppendage.elevator_PID(1250); // High rocket cargo
     }
     else {
-      MyAppendage.elevator_PID(1000);
+      MyAppendage.elevator_PID(1000); // High rocket hatch
     }
   }
   else {
