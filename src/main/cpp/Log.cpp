@@ -108,8 +108,8 @@ void Log::PDPTotal(){
 	}
 
 	frc::SmartDashboard::PutBoolean("Over 400 amps", light);
-	auto Gyrooutstr = std::to_string(counter);
-	frc::SmartDashboard::PutString("DB/String 5",Gyrooutstr);
+	//auto Gyrooutstr = std::to_string(counter);
+	//frc::SmartDashboard::PutString("DB/String 5",Gyrooutstr);
 }
 
 void Log::DrivetrainCurrentCompare(int slot,double PWMin){

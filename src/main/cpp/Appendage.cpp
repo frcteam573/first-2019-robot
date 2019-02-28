@@ -115,7 +115,7 @@ void Appendage::elevator_joystick( double LeftStick) {
   elevator->Set(LeftStick);
   double encoder_val = elevator_encoder->Get();
   auto encoder_valstr = std::to_string(encoder_val);
-  frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
+  //frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
 }
 
 void Appendage::elevator_PID(double setpoint) {
@@ -127,7 +127,7 @@ void Appendage::elevator_PID(double setpoint) {
   output_e = Threshold(output_e, 0.9);
   elevator->Set(output_e);
   auto encoder_valstr = std::to_string(encoder_val);
-  frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
+  //frc::SmartDashboard::PutString("DB/String 3",encoder_valstr);
 }
 
 void Appendage::Dashboard(){

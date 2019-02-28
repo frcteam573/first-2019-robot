@@ -80,12 +80,12 @@ else {
   auto rightinstr = std::to_string(RightStick);
 
 // Push string values to Dashboard
-  frc::SmartDashboard::PutString("DB/String 0",leftinstr);
-  frc::SmartDashboard::PutString("DB/String 1",rightinstr);
+ // frc::SmartDashboard::PutString("DB/String 0",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
 
 double AnalogIn = FrontDistance->GetVoltage();
 auto Analoginstr = std::to_string(AnalogIn);
-frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
+//frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
 
 }
 
@@ -135,7 +135,7 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 
   double AnalogIn = FrontDistance->GetVoltage();
   auto Analoginstr = std::to_string(AnalogIn);
-  frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
+  //frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
   double output_image;
   if (camera_size > image_size_max or camera_size == 0){
     error_size = AnalogIn - 0.67;
@@ -220,14 +220,14 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
   Leftdrive->Set(output_left + turn_val);
   Rightdrive->Set(output_right - turn_val);
 
-  auto Left_encoderstr = std::to_string(output_left);
+  /*auto Left_encoderstr = std::to_string(output_left);
   frc::SmartDashboard::PutString("DB/String 6",Left_encoderstr);
   auto Right_encoderstr = std::to_string(error_left_pos);
   frc::SmartDashboard::PutString("DB/String 7",Right_encoderstr);
   Right_encoderstr = std::to_string(setpoint_left_pos);
   frc::SmartDashboard::PutString("DB/String 8",Right_encoderstr);
   Right_encoderstr = std::to_string(setpoint_left_speed);
-  frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);
+  frc::SmartDashboard::PutString("DB/String 9",Right_encoderstr);*/
 }
 
 void Drive::encoder_drive(double setpoint, int count, double thresh_speed){

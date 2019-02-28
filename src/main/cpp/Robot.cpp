@@ -206,7 +206,7 @@ else if (button_x and count_3 < count_max_int_3){
     MyDrive.Joystick_drive(leftin,rightin);
   }
 
-frc::SmartDashboard::PutString("DB/String 4", to_string(count_2));
+//frc::SmartDashboard::PutString("DB/String 4", to_string(count_2));
     //LED section
   if (distance_tf_b){
     MyDrive.BlueLeds();
@@ -361,7 +361,7 @@ void Robot::TeleopPeriodic() {
   bool distance_platform = false;
   bool distance_tf_b = false;
 // Push string values to Dashboard
-  frc::SmartDashboard::PutString("DB/String 2",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
   // Drive Code Section
   if (button_b){
