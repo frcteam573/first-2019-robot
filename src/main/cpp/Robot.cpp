@@ -189,11 +189,11 @@ else if (button_x and count_3 < count_max_int_3){
     MyDrive.gyro_drive(0); 
   }
   else if (count_3 < count_max_int_3){
-    double left_pos = MyAuto.ReturnTableVal_2(count_3,0);
-    double left_speed = MyAuto.ReturnTableVal_2(count_3,1);
-    double right_pos = MyAuto.ReturnTableVal_2(count_3,2);
-    double right_speed = MyAuto.ReturnTableVal_2(count_3,3);
-    double heading = MyAuto.ReturnTableVal_2(count_3,4);
+    double left_pos = MyAuto.ReturnTableVal_3(count_3,0);
+    double left_speed = MyAuto.ReturnTableVal_3(count_3,1);
+    double right_pos = MyAuto.ReturnTableVal_3(count_3,2);
+    double right_speed = MyAuto.ReturnTableVal_3(count_3,3);
+    double heading = MyAuto.ReturnTableVal_3(count_3,4);
     
 
     //Call PID Loop to follow path
