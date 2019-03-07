@@ -111,7 +111,7 @@ double Appendage::Deadband(double in, double thres){
 
 void Appendage::elevator_joystick( double LeftStick) {
   LeftStick = LeftStick * LeftStick * LeftStick;
-  LeftStick = Threshold(LeftStick, 0.9);
+  LeftStick = Threshold(LeftStick, 0.75);
   elevator->Set(LeftStick);
   double encoder_val = elevator_encoder->Get();
   auto encoder_valstr = std::to_string(encoder_val);

@@ -25,7 +25,7 @@ void Robot::RobotInit() {
   m_chooser.SetDefaultOption(kAutoNameDefault, kAutoNameDefault);
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
-  MyLog.Create();
+  //MyLog.Create();
   MyAppendage.spatuclawRetract();
   MyAppendage.spatuclawClose();
   MyAppendage.punchyIn();
@@ -62,6 +62,9 @@ void Robot::AutonomousInit() {
   int count_2 = -40;
   int count_3 = -40;
   int count_4 = 0;
+  bool cam_state = false;
+
+  MyDrive.GyroReset();
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
   //     kAutoNameDefault);
   std::cout << "Auto selected: " << m_autoSelected << std::endl;
@@ -103,7 +106,21 @@ void Robot::AutonomousPeriodic() {
   
   table->PutNumber("ledMode", 0);
   table->PutNumber("camMode", 0);
-  table->PutNumber("pipeline", 1); //Vision Target pipeline
+  
+
+   if (button_start){
+    cam_state = true;
+  }
+  if (button_back){
+    cam_state = false;
+  }
+
+  if (cam_state){
+    table->PutNumber("pipeline", 1); //Vision Target pipeline ****RIGHTMOST****
+  }
+  else {
+    table->PutNumber("pipeline", 2); //Vision Target pipeline ****LEFTMOST****
+  }
 
   float camera_x = table->GetNumber("tx", 0);
   float camera_exist = table->GetNumber("tv", 0);
@@ -123,13 +140,13 @@ void Robot::AutonomousPeriodic() {
   int count_max_int_2 = (int)count_max_2;
   double count_max_3 = MyAuto.ReturnTableVal_3(0,5);
   int count_max_int_3 = (int)count_max_3;
-  int count_max_int_4 = 80;
+  int count_max_int_4 = 160;
   auto start_pos = frc::SmartDashboard::GetString("Starting Position","0");
   if (button_b){
    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
   else if (button_a and count_4 < count_max_int_4 and start_pos == "1"){
-    if (count_4 <40){
+    if (count_4 <80){
       MyDrive.encoder_drive(525, count_4, 0.5);
     }
     else if (count_4 < count_max_int_4){
@@ -350,7 +367,22 @@ void Robot::TeleopPeriodic() {
   
   table->PutNumber("ledMode", 0);
   table->PutNumber("camMode", 0);
-  table->PutNumber("pipeline", 1); //Vision Target pipeline
+  
+  if (button_start){
+    cam_state = true;
+  }
+  if (button_back){
+    cam_state = false;
+  }
+
+  if (cam_state){
+    table->PutNumber("pipeline", 1); //Vision Target pipeline ****RIGHTMOST****
+  }
+  else {
+    table->PutNumber("pipeline", 2); //Vision Target pipeline ****LEFTMOST****
+  }
+  
+
 
   float camera_x = table->GetNumber("tx", 0);
   float camera_exist = table->GetNumber("tv", 0);
@@ -367,26 +399,26 @@ void Robot::TeleopPeriodic() {
   if (button_b){
     distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
-  else if (button_a){
+  /*else if (button_a){
     distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
-  }
+  }*/
   //else if (button_y){
   //  distance_platform = MyDrive.platform_adjust();
   //}
   else {
     MyDrive.Joystick_drive(leftin,rightin);
 
-  MyLog.DrivetrainCurrentCompare(0, rightin);
-	MyLog.DrivetrainCurrentCompare(1, rightin);
-	MyLog.DrivetrainCurrentCompare(14, leftin);
-	MyLog.DrivetrainCurrentCompare(15, leftin);
+  //MyLog.DrivetrainCurrentCompare(0, rightin);
+	//MyLog.DrivetrainCurrentCompare(1, rightin);
+	//MyLog.DrivetrainCurrentCompare(14, leftin);
+	//MyLog.DrivetrainCurrentCompare(15, leftin);
   }
 
   //Climber code section
   MyDrive.Climb_Extend(button_lb, button_rb, leftin);
 
   //Logging section
-  MyLog.PDP(15, 0, true);
+  //MyLog.PDP(15, 0, true);
 
   // Appendage code
   if (button_lb2){

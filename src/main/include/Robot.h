@@ -48,6 +48,7 @@ class Robot : public frc::TimedRobot {
   int count_2;
   int count_3;
   int count_4;
+  bool cam_state;
   bool spatuclawState;
   
 };

@@ -71,6 +71,8 @@ frc::AnalogInput * FrontDistance;
   void YellowLeds();
   void OffLeds();
 
+  void GyroReset();
+
   void Dashboard();
 };
 #endif 

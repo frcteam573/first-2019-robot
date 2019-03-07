@@ -104,7 +104,7 @@ double Drive::Threshold(double in,double thres){
 bool Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
-  double kp_c = .025;
+  double kp_c = .03;
   double output = kp_c * error;
   Leftstick = Threshold(Leftstick,0.75);
 
@@ -207,7 +207,7 @@ void Drive::drive_PID(double setpoint_left_pos, double setpoint_right_pos, doubl
 
   double max_speed = 13; //ft/s
   double kp_speed = -1/max_speed;
-  double kp_pos = 0; //-0.025;
+  double kp_pos = -0.025;
   double kph = -0.01;  //0.01;
 
   double output_left = (error_left_pos * kp_pos) + kp_speed*setpoint_left_speed;
@@ -251,7 +251,7 @@ void Drive::encoder_drive(double setpoint, int count, double thresh_speed){
   double error_heading = gyro_val_constant - gyro_val;
 
   double kp_pos = -0.025;
-  double kph = 0.01;
+  double kph = -0.01;
 
   double output_left = Threshold((error_left_pos * kp_pos), thresh_speed) ;
   double output_right = Threshold((error_right_pos * kp_pos), thresh_speed) ;
@@ -361,3 +361,6 @@ void Drive::Dashboard(){
 
 }
 
+void Drive::GyroReset(){
+  Gyro->Reset();
+}
