@@ -50,6 +50,8 @@ frc::AnalogInput * FrontDistance;
 // User Wrtitten Functions Definitions here.
   void Joystick_drive(double LeftStick,double RightStick);
 
+  void Joystick_drive_slow(double LeftStick, double RightStick);
+
   bool Camera_Centering(double Leftstick, float camera_x);
   
   bool Camera_Centering_Distance(float camera_x, float camera_size);

@@ -169,13 +169,13 @@ void Robot::AutonomousPeriodic() {
     //Call PID Loop to follow path
     MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count) ;
     count ++;
-    count_2 = -40;
+    count_2 = -70;
   }
 
 else if (button_y and count_2 < count_max_int_2){
   
-  if (count_2 < -20){
-    MyDrive.encoder_drive(-150, count_2, 1);
+  if (count_2 < -50){
+    MyDrive.encoder_drive(-125, count_2, 1);
     
   }
   else if (count_2 < 0){
@@ -193,12 +193,12 @@ else if (button_y and count_2 < count_max_int_2){
     MyDrive.drive_PID(left_pos, right_pos, left_speed, right_speed,heading,count_2) ;
   }
   count_2++;
-  count_3 = -40;
+  count_3 = -70;
 }
 
 else if (button_x and count_3 < count_max_int_3){
   
-  if (count_3 < -20){
+  if (count_3 < -50){
     MyDrive.encoder_drive(-150, count_3, 1);
     
   }
@@ -405,6 +405,9 @@ void Robot::TeleopPeriodic() {
   //else if (button_y){
   //  distance_platform = MyDrive.platform_adjust();
   //}
+  else if (right_trigger > 0.5){
+    MyDrive.Joystick_drive_slow(leftin,rightin);
+  }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
 

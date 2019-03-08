@@ -69,12 +69,12 @@ Rightdrive->Set(RightStick);
 leftdriveold = LeftStick;
 rightdriveold = RightStick;
 
-if (abs(LeftStick) > 0.8 and abs(RightStick) > 0.8){
+/*if (abs(LeftStick) > 0.8 and abs(RightStick) > 0.8){
   Compressor->Stop();
 }
 else {
   Compressor->Start();
-}
+}*/
 // Convert double to strings
   auto leftinstr = std::to_string(LeftStick);
   auto rightinstr = std::to_string(RightStick);
@@ -88,6 +88,56 @@ auto Analoginstr = std::to_string(AnalogIn);
 //frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
 
 }
+
+
+void Drive::Joystick_drive_slow(double LeftStick,double RightStick) {
+
+// Set motor values
+LeftStick = LeftStick * 0.8;
+RightStick = RightStick * 0.8;
+LeftStick = LeftStick * LeftStick * LeftStick;
+RightStick = RightStick * RightStick * RightStick;
+
+if (LeftStick > (leftdriveold + 0.3)){
+  LeftStick = leftdriveold + 0.3;
+}
+else if (LeftStick < (leftdriveold - 0.3)){
+  LeftStick = leftdriveold - 0.3;
+}
+
+if (RightStick > (rightdriveold + 0.3)){
+  RightStick = rightdriveold + 0.3;
+}
+else if (RightStick < (rightdriveold - 0.3)){
+  RightStick = rightdriveold - 0.3;
+}
+
+Leftdrive->Set(LeftStick);
+Rightdrive->Set(RightStick);
+leftdriveold = LeftStick;
+rightdriveold = RightStick;
+
+/*if (abs(LeftStick) > 0.8 and abs(RightStick) > 0.8){
+  Compressor->Stop();
+}
+else {
+  Compressor->Start();
+}*/
+// Convert double to strings
+  auto leftinstr = std::to_string(LeftStick);
+  auto rightinstr = std::to_string(RightStick);
+
+// Push string values to Dashboard
+ // frc::SmartDashboard::PutString("DB/String 0",leftinstr);
+  //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
+
+double AnalogIn = FrontDistance->GetVoltage();
+auto Analoginstr = std::to_string(AnalogIn);
+//frc::SmartDashboard::PutString("DB/String 9",Analoginstr);
+
+}
+
+
 
 double Drive::Threshold(double in,double thres){
 
@@ -104,7 +154,7 @@ double Drive::Threshold(double in,double thres){
 bool Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
-  double kp_c = .03;
+  double kp_c = .025;
   double output = kp_c * error;
   Leftstick = Threshold(Leftstick,0.75);
 
@@ -268,9 +318,9 @@ void Drive::gyro_drive(double setpoint){
   
   
   double gyro_val = Gyro->GetAngle();
-  if (gyro_val < 0){
+  /*if (gyro_val < 0){
     setpoint = -1 * setpoint;
-  }
+  }*/
 
   
   double error_heading = setpoint - gyro_val;
