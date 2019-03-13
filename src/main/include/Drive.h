@@ -56,9 +56,11 @@ frc::AnalogInput * FrontDistance;
   
   bool Camera_Centering_Distance(float camera_x, float camera_size);
 
-  void Climb_Extend(bool button_lb, bool button_rb, double leftjoystick);
+  //void Climb_Extend(bool button_lb, bool button_rb, double leftjoystick);
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
+
+  bool climb_setpoint_PID(double left_set, double right_set, double back_set);
 
   void encoder_drive(double setpoint, int count, double thresh_speed);
 

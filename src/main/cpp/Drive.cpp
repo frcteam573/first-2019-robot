@@ -36,6 +36,13 @@ Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
 frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
 backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
+right_arm_encoder = new frc::Encoder(9, 10, false, frc::Encoder::k4X);
+left_arm_encoder = new frc::Encoder(4, 5, false, frc::Encoder::k4X);
+back_encoder = new frc::Encoder(11, 12, false, frc::Encoder::k4X);
+right_arm = new frc::VictorSP();
+right_arm->SetInverted(true);
+left_arm = new frc::VictorSP();
+back = new frc::VictorSP();
 }
 
 void Drive::InitDefaultCommand() {
@@ -212,7 +219,7 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
 }
 
 //Climber code
-void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
+/*void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
 
   if (button_lb){
    frontclimbSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
@@ -230,7 +237,49 @@ void Drive::Climb_Extend(bool button_lb, bool button_rb, double leftjoystick){
     backclimbSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
     Trollyclimb->Set(0);
   }
+  }*/
+
+
+bool Drive::climb_setpoint_PID(double left_set, double right_set, double back_set){
+  
+  double enc_left_arm = left_arm_encoder->Get();
+  double enc_right_arm = right_arm_encoder->Get();
+  double enc_back = back_encoder->Get();
+
+  double error_left_arm = left_set - enc_left_arm;
+  double error_right_arm = righ_set - enc_right_arm;
+  double error_back = back_set - enc_back;
+
+  bool near_set = false;
+
+  if (abs(error_left_arm) < 10 and abs(error_right_arm) < 10 and abs(error_back) < 10){
+    near_set = true;
   }
+
+  double kpa = 0.01;
+  double kpb = 0.01;
+
+  double output_left_arm = (error_left_arm * kpa);
+  double output_right_arm = (error_right_arm * kpa);
+  double output_back = (error_back * kpb);
+
+  output_left_arm = Threshold(output_left_arm, 0.8);
+  output_right_arm = Threshold(output_right_arm, 0.8);
+  output_back = Threshold(output_back, 0.8);
+
+  right_arm->Set(output_right_arm);
+  left_arm->Set(output_left_arm);
+  back->Set(output_back);
+
+  return near_set;
+
+}
+
+
+
+
+
+
 
 
 //void Drive::

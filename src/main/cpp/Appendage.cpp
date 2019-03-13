@@ -16,19 +16,20 @@ using namespace std;
 
 Appendage::Appendage() : Subsystem("Appendage") {
 //Leftdrive = new frc::VictorSP(0);
-spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
-spatuclawOpenClose = new frc::DoubleSolenoid(1, 2, 3);
+//spatuclawSolenoid = new frc::DoubleSolenoid(1, 0, 1);
+//spatuclawOpenClose = new frc::DoubleSolenoid(1, 2, 3);
 punchySolenoid = new frc::DoubleSolenoid(1, 4, 5);
 extendSolenoid = new frc::DoubleSolenoid(1, 6, 7);
-LeftClaw = new frc::VictorSP(8);
-LeftClaw->SetInverted(true);
-RightClaw = new frc::VictorSP(9);
+//LeftClaw = new frc::VictorSP(8);
+//LeftClaw->SetInverted(true);
+//RightClaw = new frc::VictorSP(9);
 elevator = new frc::VictorSP(6);
 elevator_encoder = new frc::Encoder( 6, 7, false, frc::Encoder::k4X);
 limit_switch = new frc::DigitalInput(8);
+intake_roller = new frc::VictorSP(7);
 }
 
-void Appendage::spatuclawExtend() {
+/*void Appendage::spatuclawExtend() {
 
   spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kForward);
 
@@ -38,15 +39,15 @@ void Appendage::spatuclawRetract() {
 
   spatuclawSolenoid->Set(frc::DoubleSolenoid::Value::kReverse);
 
-}
+}*/
 
 bool Appendage::spatuclawOpen() {
-  spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kForward);
+  //spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kForward);
   return true;
 }
 
 bool Appendage::spatuclawClose() {
-  spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kReverse);
+  //spatuclawOpenClose->Set(frc::DoubleSolenoid::Value::kReverse);
   return false;
 }
 
@@ -67,7 +68,7 @@ void Appendage::extensionIn() {
 }
 
 
-void Appendage::spatuclawIn() {
+/*void Appendage::spatuclawIn() {
   if (false){ 
     LeftClaw->Set(0);
     RightClaw->Set(0);
@@ -86,8 +87,17 @@ void Appendage::spatuclawOut() {
 void Appendage::spatuclawStop() {
   LeftClaw->Set(0);
   RightClaw->Set(0);
-}
+}*/
 
+void Appendage::roller_in() {
+  intake_roller->Set(0.8);
+}
+void Appendage::roller_out() {
+  intake_roller->Set(-0.8);
+}
+void Appendage::roller_stop() {
+  intake_roller->Set(0);
+}
 double Appendage::Threshold(double in,double thres){
 
   double out = in;

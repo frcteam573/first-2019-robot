@@ -425,12 +425,19 @@ void Robot::TeleopPeriodic() {
 
   // Appendage code
   if (button_lb2){
-    MyAppendage.spatuclawExtend();
+    MyAppendage.roller_in();
+
+    // *** BALL INTAKE ***
   }
   else if (button_rb2){
-    MyAppendage.spatuclawRetract();
+    MyAppendage.roller_out();
+
+    // *** BALL OUTTAKE ***
   }
-  
+  else {
+    MyAppendage.roller_stop();
+  }
+
   if (button_start2){
     
     spatuclawState = MyAppendage.spatuclawOpen();
@@ -455,7 +462,7 @@ if (left_trigger2 > 0.5){
   }
 
 
-  if (d_pad2 > 45 and d_pad2 < 135){
+  /*if (d_pad2 > 45 and d_pad2 < 135){
     MyAppendage.spatuclawIn();
   }
   else if (d_pad2 > 225 and d_pad2 < 315){
@@ -463,7 +470,7 @@ if (left_trigger2 > 0.5){
   }
   else {
     MyAppendage.spatuclawStop();
-  }
+  }*/
 
     
   if (button_a2) {

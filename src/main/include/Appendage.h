@@ -26,8 +26,8 @@ class Appendage : public frc::Subsystem {
 
  private:
  //Declare Motor and sensors used in appendage functions here.
- frc::DoubleSolenoid * spatuclawSolenoid;
- frc::DoubleSolenoid * spatuclawOpenClose;
+ //frc::DoubleSolenoid * spatuclawSolenoid;
+ //frc::DoubleSolenoid * spatuclawOpenClose;
  frc::DoubleSolenoid * punchySolenoid;
  frc::VictorSP * LeftClaw;
  frc::VictorSP * RightClaw;
@@ -35,21 +35,25 @@ class Appendage : public frc::Subsystem {
  frc::Encoder * elevator_encoder;
  frc::DoubleSolenoid * extendSolenoid;
  frc::DigitalInput * limit_switch;
+ frc::VictorSP * intake_roller;
   //frc::VictorSP * Rightclimb;
 
  public:
   Appendage();
-  void spatuclawRetract();
-  void spatuclawExtend();
+  //void spatuclawRetract();
+ // void spatuclawExtend();
   bool spatuclawOpen();
   bool spatuclawClose();
   void punchyIn();
   void punchyOut();
   void extensionOut();
   void extensionIn();
-  void spatuclawIn();
-  void spatuclawOut();
-  void spatuclawStop();
+  //void spatuclawIn();
+  //void spatuclawOut();
+  //void spatuclawStop();
+  void roller_in();
+  void roller_out();
+  void roller_stop();
   void elevator_joystick(double LeftStick);
   double Threshold(double in,double thres);
   void elevator_PID(double setpoint);
