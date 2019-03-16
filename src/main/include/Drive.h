@@ -37,7 +37,14 @@ frc::DoubleSolenoid * frontclimbSolenoid;
 frc::DoubleSolenoid * backclimbSolenoid;
 double Threshold(double in,double thres);
 
-  frc::VictorSP * Trollyclimb;
+  frc::VictorSP * right_arm;
+  frc::VictorSP * left_arm;
+  frc::VictorSP * right_arm_drive;
+  frc::VictorSP * left_arm_drive;
+  frc::VictorSP * back;
+  frc::Encoder * left_arm_encoder;
+  frc::Encoder * right_arm_encoder;
+  frc::Encoder * back_encoder;
   //frc::VictorSP * Rightclimb;
   frc::Encoder * Right_encoder;
   frc::Encoder * Left_encoder;
@@ -61,7 +68,11 @@ frc::AnalogInput * FrontDistance;
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
 
   bool climb_setpoint_PID(double left_set, double right_set, double back_set);
-
+  bool climb_setpoint_PID_retract_arms(double left_set, double right_set);
+  bool climb_setpoint_PID_retract_back(double back_set);
+  void climb_PID(bool level_2);
+  void climb_stop();
+  void climb_drive(double LeftStick, double RightStick);
   void encoder_drive(double setpoint, int count, double thresh_speed);
 
   void gyro_drive(double setpoint);

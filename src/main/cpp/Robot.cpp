@@ -26,7 +26,7 @@ void Robot::RobotInit() {
   m_chooser.AddOption(kAutoNameCustom, kAutoNameCustom);
   frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   //MyLog.Create();
-  MyAppendage.spatuclawRetract();
+  //MyAppendage.spatuclawRetract();
   MyAppendage.spatuclawClose();
   MyAppendage.punchyIn();
   MyDrive.OrangeLeds();
@@ -63,6 +63,8 @@ void Robot::AutonomousInit() {
   int count_3 = -40;
   int count_4 = 0;
   bool cam_state = false;
+  bool level_2 = false;
+
 
   MyDrive.GyroReset();
   // m_autoSelected = SmartDashboard::GetString("Auto Selector",
@@ -254,13 +256,21 @@ else if (button_x and count_3 < count_max_int_3){
 // OPerator controls
 
 // Appendage code
+// Appendage code
   if (button_lb2){
-    MyAppendage.spatuclawExtend();
+    MyAppendage.roller_in();
+
+    // *** BALL INTAKE ***
   }
   else if (button_rb2){
-    MyAppendage.spatuclawRetract();
+    MyAppendage.roller_out();
+
+    // *** BALL OUTTAKE ***
   }
-  
+  else {
+    MyAppendage.roller_stop();
+  }
+
   if (button_start2){
     
     spatuclawState = MyAppendage.spatuclawOpen();
@@ -285,7 +295,7 @@ if (left_trigger2 > 0.5){
   }
 
 
-  if (d_pad2 > 45 and d_pad2 < 135){
+  /*if (d_pad2 > 45 and d_pad2 < 135){
     MyAppendage.spatuclawIn();
   }
   else if (d_pad2 > 225 and d_pad2 < 315){
@@ -293,31 +303,31 @@ if (left_trigger2 > 0.5){
   }
   else {
     MyAppendage.spatuclawStop();
-  }
+  }*/
 
     
   if (button_a2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(250);
+      MyAppendage.elevator_PID(250); //Low rocket cargo 
     }
     else {
-      MyAppendage.elevator_PID(1);
+      MyAppendage.elevator_PID(1); // Base elevator level for hatches
     }
   }
   else if (button_b2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(750);
+      MyAppendage.elevator_PID(750); // Mid rocket cargo
     }
     else {
-      MyAppendage.elevator_PID(500);
+      MyAppendage.elevator_PID(500); // Mid rocket hatch
     }
   }
   else if (button_y2) {
     if (spatuclawState){
-      MyAppendage.elevator_PID(1250);
+      MyAppendage.elevator_PID(1250); // High rocket cargo
     }
     else {
-      MyAppendage.elevator_PID(1000);
+      MyAppendage.elevator_PID(1000); // High rocket hatch
     }
   }
   else {
@@ -331,7 +341,8 @@ if (left_trigger2 > 0.5){
 
 
 void Robot::TeleopInit() {
-  
+  bool level_2 = false;
+  bool in_pos = false;
 }
 
 void Robot::TeleopPeriodic() {
@@ -348,6 +359,7 @@ void Robot::TeleopPeriodic() {
   bool button_start = controller1.GetRawButton(8);
   bool button_back = controller1.GetRawButton(7);
   bool right_trigger = controller1.GetRawAxis(3);
+  bool left_trigger = controller1.GetRawAxis(2);
   //double leftin2 = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
   //double rightin2 = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
   bool button_lb2 = controller2.GetRawButton(5);
@@ -418,7 +430,40 @@ void Robot::TeleopPeriodic() {
   }
 
   //Climber code section
-  MyDrive.Climb_Extend(button_lb, button_rb, leftin);
+                  //MyDrive.Climb_Extend(button_lb, button_rb, leftin);
+
+
+if (button_rb){
+  level_2 = true;
+  in_pos = MyDrive.climb_setpoint_PID(10, 10, 10);
+  
+}
+else if (button_lb){
+  level_2 = false;
+  in_pos = MyDrive.climb_setpoint_PID(20, 20, 20);
+}
+
+if (right_trigger > 0.5 and left_trigger > 0.5){
+  MyDrive.climb_PID(level_2);
+}
+else if (button_start){
+  MyDrive.climb_setpoint_PID_retract_back(0);
+}
+else if (button_back){
+  MyDrive.climb_setpoint_PID_retract_arms(0,0);
+}
+else {
+  MyDrive.climb_stop();
+}
+
+if (in_pos){
+  MyDrive.climb_drive(leftin, rightin);
+}
+
+
+
+
+
 
   //Logging section
   //MyLog.PDP(15, 0, true);

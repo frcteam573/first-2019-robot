@@ -151,11 +151,14 @@ void Log::Dashboard(){
 	//frc::SmartDashboard::PutString("Right Cim 3", to_string(val));
 	//frc::SmartDashboard::PutString("DB/String 4",to_string(board.GetCurrent(15)));
 
-	val = board.GetCurrent(3);
-	frc::SmartDashboard::PutString("Left Climber", to_string(val));
+	val = board.GetCurrent(10);
+	frc::SmartDashboard::PutString("Left Arm", to_string(val));
 
 	val = board.GetCurrent(2);
-	frc::SmartDashboard::PutString("Right Climber", to_string(val));
+	frc::SmartDashboard::PutString("Right Arm", to_string(val));
+
+	val = board.GetCurrent(3);
+	frc::SmartDashboard::PutString("Right Arm Drive", to_string(val));
 
 
 	 val = board.GetCurrent(12);
@@ -165,10 +168,10 @@ void Log::Dashboard(){
 	frc::SmartDashboard::PutString("Elevator 1", to_string(val));
 
 	 val = board.GetCurrent(11);
-	frc::SmartDashboard::PutString("Spatuclaw Left", to_string(val));
+	frc::SmartDashboard::PutString("Left Arm Drive", to_string(val));
 
 	val = board.GetCurrent(4);
-	frc::SmartDashboard::PutString("Spatuclaw Right", to_string(val));
+	frc::SmartDashboard::PutString("Intake Roller", to_string(val));
 
 	PDPTotal();
 
