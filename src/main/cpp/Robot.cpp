@@ -440,7 +440,7 @@ if (button_rb){
 }
 else if (button_lb){
   level_2 = false;
-  in_pos = MyDrive.climb_setpoint_PID(55000, 55000, 0);// level 3 climb
+  in_pos = MyDrive.climb_setpoint_PID(0, 0, 0);// level 3 climb
 }
 else if (right_trigger > 0.5 and left_trigger > 0.5){
   //MyDrive.climb_PID(level_2);
