@@ -28,24 +28,24 @@ Rightdrive = new frc::VictorSP(0);
 //Leftclimb = new frc::VictorSP(4);
 //Trollyclimb = new frc::VictorSP(4);
 //Trollyclimb->SetInverted(true);
-Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);
-Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);
+Left_encoder = new frc::Encoder( 11, 12, false, frc::Encoder::k4X);//ACTUALLY 2 AND 3 THIS IS FOR TESTING
+Right_encoder = new frc::Encoder( 9, 10, false, frc::Encoder::k4X);//ACTUALLY 0 AND 1 THIS IS FOR TESTING
 FrontDistance = new frc::AnalogInput(2);
 Leds = new frc::AnalogOutput(0);
 Gyro = new frc::AnalogGyro(1);
 Compressor = new frc::Compressor(1);
 frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
 backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
-right_arm_encoder = new frc::Encoder(9, 10, false, frc::Encoder::k4X);
+right_arm_encoder = new frc::Encoder(1, 0, false, frc::Encoder::k4X);//ACTUALLY 10 AND 9 THIS IS FOR TESTING
 left_arm_encoder = new frc::Encoder(4, 5, false, frc::Encoder::k4X);
-back_encoder = new frc::Encoder(11, 12, false, frc::Encoder::k4X);
+back_encoder = new frc::Encoder(3, 2, false, frc::Encoder::k4X);////ACTUALLY 11 AND 12 THIS IS FOR TESTING
 right_arm = new frc::VictorSP(2);
-right_arm->SetInverted(true);
 left_arm = new frc::VictorSP(3);
+left_arm->SetInverted(true);
 back = new frc::VictorSP(4);
+back->SetInverted(true);
 right_arm_drive = new frc::VictorSP(5);
 left_arm_drive = new frc::VictorSP(8);
-left_arm_drive->SetInverted(true);
 }
 
 void Drive::InitDefaultCommand() {
@@ -255,20 +255,20 @@ bool Drive::climb_setpoint_PID(double left_set, double right_set, double back_se
 
   bool near_set = false;
 
-  if (abs(error_left_arm) < 10 and abs(error_right_arm) < 10 and abs(error_back) < 10){
+  if (abs(error_left_arm) < 1000 and abs(error_right_arm) < 1000 and abs(error_back) < 1000){
     near_set = true;
   }
 
-  double kpa = 0.01;
-  double kpb = 0.01;
+  double kpa = -0.00001;
+  double kpb = -0.00001;
 
   double output_left_arm = (error_left_arm * kpa);
   double output_right_arm = (error_right_arm * kpa);
   double output_back = (error_back * kpb);
 
-  output_left_arm = Threshold(output_left_arm, 0.8);
-  output_right_arm = Threshold(output_right_arm, 0.8);
-  output_back = Threshold(output_back, 0.8);
+  output_left_arm = Threshold(output_left_arm, 0.99);
+  output_right_arm = Threshold(output_right_arm, 0.99);
+  output_back = Threshold(output_back, 0.99);
 
   right_arm->Set(output_right_arm);
   left_arm->Set(output_left_arm);
@@ -288,8 +288,8 @@ bool Drive::climb_setpoint_PID_retract_arms(double left_set, double right_set){
   
   bool near_set = false;
 
-  double kpa = 0.01;
-  double kpb = 0.01;
+  double kpa = -0.00001;
+  
 
   double output_left_arm = (error_left_arm * kpa);
   double output_right_arm = (error_right_arm * kpa);
@@ -316,8 +316,8 @@ bool Drive::climb_setpoint_PID_retract_back(double back_set){
 
   bool near_set = false;
 
-  double kpa = 0.01;
-  double kpb = 0.01;
+  
+  double kpb = -0.00001;
 
   double output_back = (error_back * kpb);
 
@@ -330,9 +330,37 @@ bool Drive::climb_setpoint_PID_retract_back(double back_set){
 }
 
 
-void Drive::climb_PID(bool level_2){
-  
-  double left_set_rate = 0.785398163397448/2;//radians/sec pi/8
+void Drive::climb_PID(double left_set, double right_set, double back_set){
+  double enc_left_arm = left_arm_encoder->Get();
+  double enc_right_arm = right_arm_encoder->Get();
+  double enc_back = back_encoder->Get();
+
+  double error_left_arm = left_set - enc_left_arm;
+  double error_right_arm = right_set - enc_right_arm;
+  double error_back = back_set - enc_back;
+
+  bool near_set = false;
+
+  if (abs(error_left_arm) < 1000 and abs(error_right_arm) < 1000 and abs(error_back) < 1000){
+    near_set = true;
+  }
+
+  double kpa = -0.0001;
+  double kpb = -0.0001;
+
+  double output_left_arm = (error_left_arm * kpa);
+  double output_right_arm = (error_right_arm * kpa);
+  double output_back = (error_back * kpb);
+
+  output_left_arm = Threshold(output_left_arm, 0.99);
+  output_right_arm = Threshold(output_right_arm, 0.99);
+  output_back = Threshold(output_back, 0.99);
+
+  right_arm->Set(output_right_arm);
+  left_arm->Set(output_left_arm);
+  back->Set(output_back);
+
+  /*double left_set_rate = 0.785398163397448/2;//radians/sec pi/8
   double right_set_rate = 0.785398163397448/2; //radians/sec pi/8
   double back_set_rate = 6; // inches/sec
 
@@ -340,9 +368,9 @@ void Drive::climb_PID(bool level_2){
   double right_set = 1.5707963267948966; //radians pi/2
   double back_set = 20; //inches
   if (level_2){
-    left_set = 0.3490658503988659;
-    right_set = 0.3490658503988659;
-    back_set = 7;
+    left_set = 205000;//0.3490658503988659;
+    right_set = 205000;//0.3490658503988659;
+    back_set = 110000;
   }
 
   double enc_left = left_arm_encoder->Get();
@@ -353,24 +381,29 @@ void Drive::climb_PID(bool level_2){
   double enc_right_rate = right_arm_encoder->GetRate();
   double enc_back_rate = back_encoder->GetRate();
 
-  enc_left = enc_left * 1024 / 866.25; // radians/sec
-  enc_right = enc_right * 1024 / 866.25; // radians/sec
-  enc_back = enc_back / 2.8274333882308 /35  ; //inches/sec
+  //enc_left = enc_left * 1024 / 866.25; // radians/sec
+  //enc_right = enc_right * 1024 / 866.25; // radians/sec
+  //enc_back = enc_back / 2.8274333882308 /35  ; //inches/sec
 
-  enc_left_rate = enc_left_rate * 1024 / 866.25; // radians/sec
-  enc_right_rate = enc_right_rate * 1024 / 866.25; // radians/sec
+  enc_left_rate = enc_left_rate  / 866.25; // radians/sec
+  enc_right_rate = enc_right_rate / 866.25; // radians/sec
   enc_back_rate = enc_back_rate / 2.8274333882308 /35  ; //inches/sec
   
-  double error_left_rate = left_set_rate - enc_left_rate;
-  double error_right_rate = right_set_rate - enc_right_rate;
+  double error_left_rate = left_set - enc_left;
+  double error_right_rate = right_set - enc_right;
   double error_back_rate = back_set_rate - enc_back_rate;
   
-  double kpa = 0.01;
-  double kpb = 0.01;
+  double kpa = -0.001;
+  double kpb = -0.0001;
+
+
+  double error_back = back_set - enc_back;
+  double output_back = (error_back * kpb);
+  
 
   double output_left_arm = (error_left_rate * kpa);
   double output_right_arm = (error_right_rate * kpa);
-  double output_back = (error_back_rate * kpb);
+  //double output_back = (error_back_rate * kpb);
 
   output_left_arm = Threshold(output_left_arm, 0.8);
   output_right_arm = Threshold(output_right_arm, 0.8);
@@ -380,15 +413,22 @@ void Drive::climb_PID(bool level_2){
   left_arm->Set(output_left_arm);
   back->Set(output_back);*/
 
+/*
+  if (enc_back >= back_set-10000){
+    
 
-  if (enc_back >= back_set){
-    back->Set(0);
+    double error_back = back_set - enc_back;
+    double kpb = 0.001;
+    double output_back = (error_back * kpb);
+    output_back = Threshold(output_back, 0.8);
+
+    back->Set(output_back);
   }
   else{
     back->Set(output_back);
-  }
+  }*/
 
-  if (enc_left >= left_set){
+  /*if (enc_left >= left_set){
     left_arm->Set(0);
   }
   else{
@@ -400,7 +440,7 @@ void Drive::climb_PID(bool level_2){
   }
   else{
     right_arm->Set(output_right_arm);
-  }
+  }*/
 
 }
 
@@ -525,6 +565,13 @@ void Drive::gyro_drive(double setpoint){
 }
 
 
+
+void Drive::arm_joystick(double LeftStick, double RightStick){
+  left_arm->Set(LeftStick);
+  right_arm->Set(LeftStick);
+  back->Set(RightStick);
+}
+
 /*bool Drive::platform_adjust(){
   double AnalogIn = FrontDistance->GetVoltage();
   double error = 1.26 - AnalogIn;
@@ -574,9 +621,9 @@ void Drive::Dashboard(){
 
   double encoder_val_left = Left_encoder->Get();
   double encoder_val_right = Right_encoder->Get();
-  double right_arm_encoder = right_arm_enc->Get();
-  double left_arm_encoder = left_arm_enc->Get();
-  double back_encoder = back_enc->Get();
+  double right_arm_enc = right_arm_encoder->Get();
+  double left_arm_enc = left_arm_encoder->Get();
+  double back_enc = back_encoder->Get();
 
 
   auto Left_encoderstr = std::to_string(encoder_val_left);
@@ -585,13 +632,13 @@ void Drive::Dashboard(){
   auto Right_encoderstr = std::to_string(encoder_val_right);
   frc::SmartDashboard::PutString("Right Encoder",Right_encoderstr);
 
-  auto Left_arm_encoderstr = std::to_string(left_arm_encoder);
+  auto Left_arm_encoderstr = std::to_string(left_arm_enc);
   frc::SmartDashboard::PutString("Left Arm Encoder",Left_arm_encoderstr);
 
-  auto Right_arm_encoderstr = std::to_string(right_arm_encoder);
+  auto Right_arm_encoderstr = std::to_string(right_arm_enc);
   frc::SmartDashboard::PutString("Right Arm Encoder",Right_arm_encoderstr);
 
-  auto Back_encoderstr = std::to_string(back_encoder);
+  auto Back_encoderstr = std::to_string(back_enc);
   frc::SmartDashboard::PutString("Back Encoder",Back_encoderstr);
 
 

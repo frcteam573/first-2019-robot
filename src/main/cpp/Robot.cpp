@@ -435,16 +435,24 @@ void Robot::TeleopPeriodic() {
 
 if (button_rb){
   level_2 = true;
-  in_pos = MyDrive.climb_setpoint_PID(10, 10, 10);
+  in_pos = MyDrive.climb_setpoint_PID(150000, 150000, 0);//level 2 climb
   
 }
 else if (button_lb){
   level_2 = false;
-  in_pos = MyDrive.climb_setpoint_PID(20, 20, 20);
+  in_pos = MyDrive.climb_setpoint_PID(55000, 55000, 0);// level 3 climb
 }
-
-if (right_trigger > 0.5 and left_trigger > 0.5){
-  MyDrive.climb_PID(level_2);
+else if (right_trigger > 0.5 and left_trigger > 0.5){
+  //MyDrive.climb_PID(level_2);
+  if (level_2){
+    MyDrive.climb_PID(245000, 245000, 110000);
+    MyDrive.climb_drive(leftin,rightin);
+  }
+  else{
+    MyDrive.climb_PID(245000, 245000, 249000);
+    MyDrive.climb_drive(leftin,rightin);
+  }
+  
 }
 else if (button_start){
   MyDrive.climb_setpoint_PID_retract_back(0);
@@ -454,11 +462,12 @@ else if (button_back){
 }
 else {
   MyDrive.climb_stop();
+  MyDrive.climb_drive(0,0);
 }
 
-if (in_pos){
-  MyDrive.climb_drive(leftin, rightin);
-}
+
+
+
 
 
 
@@ -584,7 +593,17 @@ else {
 
 }
 
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+
+  double leftin = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
+  double rightin = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
+
+  MyDrive.arm_joystick(leftin, rightin);
+
+  MyDrive.Dashboard();
+
+
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() { return frc::StartRobot<Robot>(); }

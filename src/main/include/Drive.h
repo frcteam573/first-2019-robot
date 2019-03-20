@@ -70,7 +70,7 @@ frc::AnalogInput * FrontDistance;
   bool climb_setpoint_PID(double left_set, double right_set, double back_set);
   bool climb_setpoint_PID_retract_arms(double left_set, double right_set);
   bool climb_setpoint_PID_retract_back(double back_set);
-  void climb_PID(bool level_2);
+  void climb_PID(double left_set, double right_set, double back_set);
   void climb_stop();
   void climb_drive(double LeftStick, double RightStick);
   void encoder_drive(double setpoint, int count, double thresh_speed);
@@ -78,6 +78,8 @@ frc::AnalogInput * FrontDistance;
   void gyro_drive(double setpoint);
 
   bool platform_adjust();
+
+  void arm_joystick(double LeftStick, double RightStick);
 
   void OrangeLeds();
   void PartyLeds();
