@@ -24,8 +24,8 @@ extendSolenoid = new frc::DoubleSolenoid(1, 6, 7);
 //LeftClaw->SetInverted(true);
 //RightClaw = new frc::VictorSP(9);
 elevator = new frc::VictorSP(6);
-elevator_encoder = new frc::Encoder( 6, 7, false, frc::Encoder::k4X);
-limit_switch = new frc::DigitalInput(8);
+elevator_encoder = new frc::Encoder( 19, 20, false, frc::Encoder::k4X);
+limit_switch = new frc::DigitalInput(12);
 intake_roller = new frc::VictorSP(7);
 }
 
@@ -122,6 +122,9 @@ double Appendage::Deadband(double in, double thres){
 void Appendage::elevator_joystick( double LeftStick) {
   LeftStick = LeftStick * LeftStick * LeftStick;
   LeftStick = Threshold(LeftStick, 0.75);
+  if (LeftStick > 0.3){
+    LeftStick = 0.3;
+  }
   elevator->Set(LeftStick);
   double encoder_val = elevator_encoder->Get();
   auto encoder_valstr = std::to_string(encoder_val);
@@ -143,8 +146,12 @@ void Appendage::elevator_PID(double setpoint) {
 void Appendage::Dashboard(){
 
   double elevator_encoder_val = elevator_encoder->Get();
+  bool limit_switch_val = limit_switch->Get();
 
   auto elevator_encoderstr = std::to_string(elevator_encoder_val);
   frc::SmartDashboard::PutString("Elevator Encoder",elevator_encoderstr);
+
+  auto limit_switchstr = std::to_string(limit_switch_val);
+  frc::SmartDashboard::PutString("Claw Limit Switch",limit_switchstr);
  
 }

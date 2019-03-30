@@ -62,8 +62,9 @@ void Robot::AutonomousInit() {
   int count_2 = -40;
   int count_3 = -40;
   int count_4 = 0;
-  bool cam_state = false;
+  int cam_state = 0;
   bool level_2 = false;
+
 
 
   MyDrive.GyroReset();
@@ -108,20 +109,24 @@ void Robot::AutonomousPeriodic() {
   
   table->PutNumber("ledMode", 0);
   table->PutNumber("camMode", 0);
-  
+  auto pos_1 = frc::SmartDashboard::GetString("Position 1","0");
+  auto left_or_right = frc::SmartDashboard::GetString("Left or Right?","2");
 
-   if (button_start){
-    cam_state = true;
+   if (pos_1 == "3" and left_or_right == "2" || pos_1 == "4" and left_or_right == "1"){
+    cam_state = 2;
   }
-  if (button_back){
-    cam_state = false;
+  if (pos_1 == "3" and left_or_right == "1" || pos_1 == "4" and left_or_right == "2"){
+    cam_state = 3;
   }
 
-  if (cam_state){
-    table->PutNumber("pipeline", 1); //Vision Target pipeline ****RIGHTMOST****
+  if (cam_state == 2){
+    table->PutNumber("pipeline", 2); //Vision Target pipeline ****RIGHTMOST****
+  }
+  else if (cam_state == 3) {
+    table->PutNumber("pipeline", 3); //Vision Target pipeline ****LEFTMOST****
   }
   else {
-    table->PutNumber("pipeline", 2); //Vision Target pipeline ****LEFTMOST****
+    table->PutNumber("pipeline", 1);
   }
 
   float camera_x = table->GetNumber("tx", 0);
@@ -343,6 +348,7 @@ if (left_trigger2 > 0.5){
 void Robot::TeleopInit() {
   bool level_2 = false;
   bool in_pos = false;
+  bool first = true;
 }
 
 void Robot::TeleopPeriodic() {
@@ -360,15 +366,15 @@ void Robot::TeleopPeriodic() {
   bool button_back = controller1.GetRawButton(7);
   bool right_trigger = controller1.GetRawAxis(3);
   bool left_trigger = controller1.GetRawAxis(2);
-  //double leftin2 = controller1.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
-  //double rightin2 = controller1.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
+  double leftin2 = controller2.GetRawAxis(1); //Get Drive Left Joystick Y Axis Value
+  double rightin2y = controller2.GetRawAxis(5); //Get Drive right Joystick Y Axis Value
+  double rightin2x = controller2.GetRawAxis(4); //x axis read in 
   bool button_lb2 = controller2.GetRawButton(5);
   bool button_rb2 = controller2.GetRawButton(6);
   bool button_start2 = controller2.GetRawButton(8);
   bool button_back2 = controller2.GetRawButton(7);
   double right_trigger2 = controller2.GetRawAxis(3);
   double d_pad2 = controller2.GetPOV(0);
-  double leftin2 = controller2.GetRawAxis(1);
   bool button_a2 = controller2.GetRawButton(1);
   bool button_b2 = controller2.GetRawButton(2);
   bool button_y2 = controller2.GetRawButton(4);
@@ -387,11 +393,14 @@ void Robot::TeleopPeriodic() {
     cam_state = false;
   }
 
-  if (cam_state){
-    table->PutNumber("pipeline", 1); //Vision Target pipeline ****RIGHTMOST****
+  if (button_x){
+    table->PutNumber("pipeline", 3); //Vision Target pipeline ****LEFTMOST****
+  }
+  else if (button_b){
+    table->PutNumber("pipeline", 2); //Vision Target pipeline ****RIGHTMOST****
   }
   else {
-    table->PutNumber("pipeline", 2); //Vision Target pipeline ****LEFTMOST****
+    table->PutNumber("pipeline", 1); //Vision Target pipeline ****CLOSEST****
   }
   
 
@@ -408,20 +417,22 @@ void Robot::TeleopPeriodic() {
   //frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
   // Drive Code Section
-  if (button_b){
+  if (button_b || button_x || button_a){
     distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
   }
   /*else if (button_a){
     distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
   }*/
-  //else if (button_y){
-  //  distance_platform = MyDrive.platform_adjust();
-  //}
+  else if (button_y){
+    MyDrive.gyro_drive_straight(leftin, first);
+    first = false;
+  }
   else if (right_trigger > 0.5){
     MyDrive.Joystick_drive_slow(leftin,rightin);
   }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
+    first = true;
 
   //MyLog.DrivetrainCurrentCompare(0, rightin);
 	//MyLog.DrivetrainCurrentCompare(1, rightin);
@@ -436,20 +447,27 @@ void Robot::TeleopPeriodic() {
 if (button_rb){
   level_2 = true;
   in_pos = MyDrive.climb_setpoint_PID(150000, 150000, 0);//level 2 climb
+  //MyDrive.gyro_reset();
   
 }
 else if (button_lb){
   level_2 = false;
   in_pos = MyDrive.climb_setpoint_PID(0, 0, 0);// level 3 climb
+  //MyDrive.gyro_reset();
 }
+
 else if (right_trigger > 0.5 and left_trigger > 0.5){
   //MyDrive.climb_PID(level_2);
+  rightin2x = rightin2x * rightin2x * rightin2x;
+  rightin2y = rightin2y * rightin2y * rightin2y;
+  double left_trim = rightin2x * 20000;
+  double right_trim = rightin2y * -20000;
   if (level_2){
-    MyDrive.climb_PID(245000, 245000, 110000);
+    MyDrive.climb_PID(255000+left_trim, 247500+right_trim, 110000);
     MyDrive.climb_drive(leftin,rightin);
   }
   else{
-    MyDrive.climb_PID(245000, 245000, 249000);
+    MyDrive.climb_PID(255000+left_trim, 247500+right_trim, 249000);
     MyDrive.climb_drive(leftin,rightin);
   }
   

@@ -32,6 +32,7 @@ frc::VictorSP * Leftdrive;
 frc::VictorSP * Rightdrive;
 frc::AnalogOutput * Leds;
 frc::AnalogGyro * Gyro;
+frc::AnalogGyro * Gyro2;
 frc::Compressor * Compressor;
 frc::DoubleSolenoid * frontclimbSolenoid;
 frc::DoubleSolenoid * backclimbSolenoid;
@@ -67,6 +68,8 @@ frc::AnalogInput * FrontDistance;
 
   void drive_PID(double setpoint_left_pos, double setpoint_right_pos, double setpoint_left_speed, double setpoint_right_speed, double heading, int count);
 
+  void gyro_reset();
+  double climb_even();
   bool climb_setpoint_PID(double left_set, double right_set, double back_set);
   bool climb_setpoint_PID_retract_arms(double left_set, double right_set);
   bool climb_setpoint_PID_retract_back(double back_set);
@@ -76,6 +79,7 @@ frc::AnalogInput * FrontDistance;
   void encoder_drive(double setpoint, int count, double thresh_speed);
 
   void gyro_drive(double setpoint);
+  void gyro_drive_straight(double LeftStick, bool first);
 
   bool platform_adjust();
 

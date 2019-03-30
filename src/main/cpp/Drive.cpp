@@ -28,24 +28,25 @@ Rightdrive = new frc::VictorSP(0);
 //Leftclimb = new frc::VictorSP(4);
 //Trollyclimb = new frc::VictorSP(4);
 //Trollyclimb->SetInverted(true);
-Left_encoder = new frc::Encoder( 11, 12, false, frc::Encoder::k4X);//ACTUALLY 2 AND 3 THIS IS FOR TESTING
-Right_encoder = new frc::Encoder( 9, 10, false, frc::Encoder::k4X);//ACTUALLY 0 AND 1 THIS IS FOR TESTING
+Left_encoder = new frc::Encoder( 2, 3, false, frc::Encoder::k4X);//ACTUALLY 2 AND 3 THIS IS FOR TESTING
+Right_encoder = new frc::Encoder( 0, 1, false, frc::Encoder::k4X);//ACTUALLY 0 AND 1 THIS IS FOR TESTING
 FrontDistance = new frc::AnalogInput(2);
-Leds = new frc::AnalogOutput(0);
+Leds = new frc::AnalogOutput(4);
 Gyro = new frc::AnalogGyro(1);
+Gyro2 = new frc::AnalogGyro(0);
 Compressor = new frc::Compressor(1);
 frontclimbSolenoid = new frc::DoubleSolenoid(2, 0, 1);
 backclimbSolenoid = new frc::DoubleSolenoid(2, 2, 3);
-right_arm_encoder = new frc::Encoder(1, 0, false, frc::Encoder::k4X);//ACTUALLY 10 AND 9 THIS IS FOR TESTING
+right_arm_encoder = new frc::Encoder(6, 7, false, frc::Encoder::k4X);//ACTUALLY 10 AND 9 THIS IS FOR TESTING
 left_arm_encoder = new frc::Encoder(4, 5, false, frc::Encoder::k4X);
-back_encoder = new frc::Encoder(3, 2, false, frc::Encoder::k4X);////ACTUALLY 11 AND 12 THIS IS FOR TESTING
+back_encoder = new frc::Encoder(8, 9, false, frc::Encoder::k4X);////ACTUALLY 11 AND 12 THIS IS FOR TESTING
 right_arm = new frc::VictorSP(2);
 left_arm = new frc::VictorSP(3);
 left_arm->SetInverted(true);
 back = new frc::VictorSP(4);
-back->SetInverted(true);
 right_arm_drive = new frc::VictorSP(5);
 left_arm_drive = new frc::VictorSP(8);
+left_arm_drive->SetInverted(true);
 }
 
 void Drive::InitDefaultCommand() {
@@ -161,6 +162,32 @@ double Drive::Threshold(double in,double thres){
   return out;
 }
 
+
+
+void Drive::gyro_drive_straight(double LeftStick, bool first){
+  if (first){
+    Gyro->Reset();
+  }
+  
+  double gyro_val = Gyro->GetAngle();
+  /*if (gyro_val < 0){
+    setpoint = -1 * setpoint;
+  }*/
+
+  
+  double error_heading = 0 - gyro_val;
+
+  
+  double kph = -0.01;
+
+  
+  double turn_val = kph * error_heading;
+ 
+  Leftdrive->Set(LeftStick + turn_val);
+  Rightdrive->Set(LeftStick - turn_val);
+}
+
+
 bool Drive::Camera_Centering(double Leftstick, float camera_x){
 
   double error = 0 - camera_x;
@@ -241,6 +268,23 @@ bool Drive::Camera_Centering_Distance( float camera_x, float camera_size){
     Trollyclimb->Set(0);
   }
   }*/
+
+void Drive::gyro_reset(){
+  Gyro2->Reset();
+}
+
+
+double Drive::climb_even(){
+  double gyro2_val = Gyro2->GetAngle();
+
+  double error_vertical = 0 - gyro2_val;
+
+  double kph = 0.01; //FIND RATIO !!!!!!!!!!!!!
+
+  double output = kph * error_vertical;
+
+  return output;
+}
 
 
 bool Drive::climb_setpoint_PID(double left_set, double right_set, double back_set){
