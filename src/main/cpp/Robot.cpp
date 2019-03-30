@@ -378,6 +378,7 @@ void Robot::TeleopPeriodic() {
   bool button_a2 = controller2.GetRawButton(1);
   bool button_b2 = controller2.GetRawButton(2);
   bool button_y2 = controller2.GetRawButton(4);
+  bool button_x2 = controller2.GetRawButton(3);
   double left_trigger2 = controller2.GetRawAxis(2);
   // Read in camera Stuff
   
@@ -581,6 +582,14 @@ if (left_trigger2 > 0.5){
       MyAppendage.elevator_PID(1000); // High rocket hatch
     }
   }
+  else if (button_x2) {
+    if (spatuclawState){
+      MyAppendage.elevator_PID(0); // cargo pick up
+    }
+    else {
+      MyAppendage.elevator_joystick(leftin2);
+    }
+  }
   else {
     MyAppendage.elevator_joystick(leftin2);
   }
@@ -619,6 +628,12 @@ else {
   frc::SmartDashboard::PutString("Camera TX", to_string(camera_x));
   frc::SmartDashboard::PutString("Camera TA", to_string(image_size));
 
+  if (spatuclawState){
+    frc::SmartDashboard::PutBoolean("Ball Mode", true);
+  }
+  else {
+    frc::SmartDashboard::PutBoolean("Ball Mode", false);
+  }
 
 
 }
