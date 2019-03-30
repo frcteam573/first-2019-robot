@@ -399,6 +399,9 @@ void Robot::TeleopPeriodic() {
   else if (button_b){
     table->PutNumber("pipeline", 2); //Vision Target pipeline ****RIGHTMOST****
   }
+  else if (button_y){
+    table->PutNumber("pipeline", 4); //Vision Target pipeline ****BALL****
+  }
   else {
     table->PutNumber("pipeline", 1); //Vision Target pipeline ****CLOSEST****
   }
@@ -417,18 +420,27 @@ void Robot::TeleopPeriodic() {
   //frc::SmartDashboard::PutString("DB/String 2",leftinstr);
   //frc::SmartDashboard::PutString("DB/String 1",rightinstr);
   // Drive Code Section
-  if (button_b || button_x || button_a){
-    distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
+  if (button_b || button_x || button_a || button_y){
+    if (camera_exist == 1){
+       distance_tf_b = MyDrive.Camera_Centering(leftin, camera_x);
+       first = true;
+    }
+    else {
+      MyDrive.gyro_drive_straight(leftin, first);
+      first = false;
+    }
+    
   }
   /*else if (button_a){
     distance_tf = MyDrive.Camera_Centering_Distance(camera_x, image_size);
   }*/
-  else if (button_y){
+  /*else if (button_y){
     MyDrive.gyro_drive_straight(leftin, first);
     first = false;
-  }
+  }*/
   else if (right_trigger > 0.5){
     MyDrive.Joystick_drive_slow(leftin,rightin);
+    first = true;
   }
   else {
     MyDrive.Joystick_drive(leftin,rightin);
