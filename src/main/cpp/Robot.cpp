@@ -349,6 +349,7 @@ void Robot::TeleopInit() {
   bool level_2 = false;
   bool in_pos = false;
   bool first = true;
+  bool climb_drive_tf = false;
 }
 
 void Robot::TeleopPeriodic() {
@@ -476,27 +477,33 @@ else if (right_trigger > 0.5 and left_trigger > 0.5){
   double left_trim = rightin2x * 20000;
   double right_trim = rightin2y * -20000;
   if (level_2){
-    MyDrive.climb_PID(255000+left_trim, 247500+right_trim, 110000);
+    MyDrive.climb_PID(270000+left_trim, 260000+right_trim, 110000);
     MyDrive.climb_drive(leftin,rightin);
+    climb_drive_tf = true;
   }
   else{
-    MyDrive.climb_PID(255000+left_trim, 247500+right_trim, 249000);
+    MyDrive.climb_PID(270000+left_trim, 260000+right_trim, 249000);
     MyDrive.climb_drive(leftin,rightin);
+    climb_drive_tf = true;
   }
   
 }
 else if (button_start){
-  MyDrive.climb_setpoint_PID_retract_back(0);
+  MyDrive.climb_setpoint_PID_retract_back(-2800);
 }
 else if (button_back){
   MyDrive.climb_setpoint_PID_retract_arms(0,0);
 }
 else {
   MyDrive.climb_stop();
+  
+}
+if (climb_drive_tf){
+  MyDrive.climb_drive(leftin,rightin);
+}
+else {
   MyDrive.climb_drive(0,0);
 }
-
-
 
 
 

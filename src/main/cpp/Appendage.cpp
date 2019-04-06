@@ -25,7 +25,7 @@ extendSolenoid = new frc::DoubleSolenoid(1, 6, 7);
 //RightClaw = new frc::VictorSP(9);
 elevator = new frc::VictorSP(6);
 elevator_encoder = new frc::Encoder( 19, 20, false, frc::Encoder::k4X);
-limit_switch = new frc::DigitalInput(12);
+limit_switch = new frc::DigitalInput(19);
 intake_roller = new frc::VictorSP(7);
 }
 

@@ -53,5 +53,6 @@ class Robot : public frc::TimedRobot {
   bool in_pos;
   bool spatuclawState;
   bool first;
+  bool climb_drive_tf;
   
 };
