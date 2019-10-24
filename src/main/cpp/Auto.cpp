@@ -17,6 +17,38 @@ Auto::Auto() : Subsystem("Auto") {
 }
 
 
+double create_trajectory(double startx, double starty, double startA, double endx, double endy, double endA, double t){
+    
+    double max_velocity = 10;//ft/s
+    double max_accel = 3;//ft/s^2
+    double radius = 0.25;//feet
+    double base = 2;//feet
+    double t = 2;//seconds
+    
+    // generating x trajectory function //
+    double a_0x = startx; 
+    double a_1x = 0;
+    double a_2x = 3/tf^2(endx-startx)
+    double a_3x = -2/tf^3(endx-startx)
+    // generating y trajectory function //
+    double a_0y = starty;
+    double a_1y = 0;
+    double a_2y = 3/tf^2(endy-starty)
+    double a_3y = -2/tf^3(endy-starty)
+    //generating A trajectory function //
+    double a_0A = startA; 
+    double a_1A = 0;
+    double a_2A = 3/tf^2(endA-startA)
+    double a_3A = -2/tf^3(endA-startA)
+
+    double ydot = 3*a_0y*t^2 + 2*a_1y*t + a_2y;
+    double Adot = 3*a_0A*t^2 + 2*a_1A*t + a_2A;
+    double A = a_0A*t^3 +a_1A*t^2 + a_2A*t + a_3A;
+    
+    double wr = (ydot/sin(A))+(Adot/2);
+    double wl = (ydot/sin(A))-(Adot/2);
+
+}
 
 
 double Auto::ReturnTableVal(int count, int select){
